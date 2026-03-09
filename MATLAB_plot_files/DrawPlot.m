@@ -1,0 +1,434 @@
+%--------------------------------------------------------------------------负载两端电压波形（单图版）
+% clc; clear; close all;
+% 
+% % 读取txt数据
+% data = readmatrix('exp_data/load_vol.txt');
+% 
+% % 提取横纵坐标
+% x = data(:,1)* 1e6;
+% y = data(:,2);
+% 
+% % 新建图窗
+% fig = figure;
+% 
+% % 绘图
+% plot(x, y, 'LineWidth', 1.2);
+% box on;
+% 
+% % 自动增加纵向留白
+% % ymin = min(y);
+% % ymax = max(y);
+% % margin = 0.1 * (ymax - ymin);
+% % ylim([ymin - margin, ymax + margin]);
+% ylim([-340,340]);
+% yticks(-340:170:340);
+% 
+% % 坐标轴标签
+% xlabel('时间(μs)', 'FontName', '黑体', 'FontSize', 10);
+% ylabel('电压(V)', 'FontName', '黑体', 'FontSize', 10);
+% 
+% % 坐标轴字体
+% set(gca, 'FontName', 'Times New Roman', 'FontSize', 10, 'LineWidth', 1);
+% 
+% % 调整图窗背景为白色
+% set(fig, 'Color', 'w');
+% 
+% 
+% PlotToFileColorPDF(fig, 'load_vol', 8, 5);
+
+%--------------------------------------------------------------------------变压器次极两端电压波形（单图版）
+% clc; clear; close all;
+% clc; clear; close all;
+% 
+% % 读取txt数据
+% data = readmatrix('exp_data/trans_vol.txt');
+% 
+% % 提取横纵坐标
+% x = data(:,1)* 1e6;
+% y = data(:,2);
+% 
+% % 新建图窗
+% fig = figure;
+% 
+% % 绘图
+% plot(x, y, 'LineWidth', 1.2);
+% box on;
+% 
+% % 自动增加纵向留白
+% % ymin = min(y);
+% % ymax = max(y);
+% % margin = 0.1 * (ymax - ymin);
+% % ylim([ymin - margin, ymax + margin]);
+% % yticks(-450:150:450);
+% 
+% % 坐标轴标签
+% xlabel('时间(μs)', 'FontName', '黑体', 'FontSize', 10);
+% ylabel('电压(V)', 'FontName', '黑体', 'FontSize', 10);
+% 
+% % 坐标轴字体
+% set(gca, 'FontName', 'Times New Roman', 'FontSize', 10, 'LineWidth', 1);
+% 
+% % 调整图窗背景为白色
+% set(fig, 'Color', 'w');
+% 
+% 
+% PlotToFileColorPDF(fig, 'trans_vol', 8, 5);
+%--------------------------------------------------------------------------变压器次极两端电压波形（多图版）
+% clc; clear; close all;
+% 
+% % 读取数据
+% data = readmatrix('exp_data/load_vol.txt');
+% data1 = readmatrix('exp_data/trans_vol.txt');
+% data2 = readmatrix('exp_data/adjust_vol.txt');
+% 
+% x = data(:,1)*1e6;
+% y1 = data(:,2);
+% y2 = data1(:,2);
+% y3 = data2(:,2);
+% 
+% fig = figure;
+% 
+% %使用线性进行区分
+% % plot(x,y1,'k-','LineWidth',1.2); hold on
+% % plot(x,y2,'k--','LineWidth',1.2);
+% % % plot(x,y3,'k:','LineWidth',1.5)
+% %使用颜色进行区分
+% plot(x, y1, 'LineWidth', 1.2); hold on
+% plot(x, y2, 'LineWidth', 1.2);
+% plot(x, y3, 'LineWidth', 1.2);
+% 
+% box on
+% 
+% %设置上下留白空间，避免波形顶到窗口顶部
+% lim = 450;
+% step = 150;
+% ylim([-300,lim]);
+% yticks(-300:step:lim);
+% 
+% lgd = legend({'负载电压','推挽逆变器输出电压','可调直流源输出电压'}, ...
+%        'FontName','黑体', ...
+%        'FontSize',9, ...
+%        'Location','northeast');
+% lgd.NumColumns = 3;
+% 
+% xlabel('时间(μs)','FontName','黑体','FontSize',10)
+% ylabel('电压(V)','FontName','黑体','FontSize',10)
+% 
+% set(gca,...
+%     'FontName','Times New Roman',...
+%     'FontSize',10,...
+%     'LineWidth',1)
+% 
+% set(fig,'Color','w')
+% 
+% PlotToFileColorPDF(fig,'output_vol',15.5,6)
+%--------------------------------------------------------------------------输入阻抗（单图版）
+% clc; clear; close all;
+% 
+% % 读取txt数据
+% data = readmatrix('exp_data/LC_r.txt');
+% 
+% % 提取横纵坐标
+% x = data(:,1);
+% Z = data(:,2) + 1j*data(:,3);
+% Z_abs = abs(Z);
+% % mag_db = log10(abs(Z));
+% 
+% % 新建图窗
+% fig = figure;
+% 
+% % 绘图
+% % plot(x, mag_db, 'LineWidth', 1.2);
+% loglog(x, Z_abs, 'LineWidth', 1.2);
+% box on;
+% hold on;
+% 
+% plot(x(847), Z_abs(847), 'ro', 'MarkerSize', 7, 'LineWidth', 1.2);   % 画点
+% 
+% x0 = x(847);
+% y0 = Z_abs(847);
+% 
+% ax = gca;
+% x_min = ax.XLim(1);
+% y_min = ax.YLim(1);
+% % 画到纵坐标轴的投影线（纵线）
+% line([x0 x0], [y0 1], 'Color', 'r', 'LineStyle', '--', 'LineWidth', 1);
+% 
+% % 画到纵坐标轴的投影线（横线）
+% line([x_min x0], [y0 y0], 'Color', 'r', 'LineStyle', '--', 'LineWidth', 1);
+% 
+% 
+% % 自动增加纵向留白
+% ylim([10,10000]);
+% % yticks(-340:170:340);
+% 
+% % 坐标轴标签
+% xlabel('频率(Hz)', 'FontName', '黑体', 'FontSize', 10);
+% ylabel('阻抗(Ω)', 'FontName', '黑体', 'FontSize', 10);
+% 
+% xticks([1e5 3.5e5 1e6]);
+% xticklabels({'100KHz','350KHz','1MHz'});
+% 
+% yticks([1e1 1e2 1e3 1e4]);
+% yticklabels({'1','10', '100','1000'});
+% 
+% text(x0*0.3, y0*0.2, sprintf('(%.3f KHz, %.2f Ω)', x0/1e03, y0), ...
+%     'VerticalAlignment', 'bottom', ...
+%     'HorizontalAlignment', 'left', ...
+%     'FontSize', 8);
+% 
+% % 坐标轴字体
+% set(gca, 'FontName', 'Times New Roman', 'FontSize', 10, 'LineWidth', 1);
+% 
+% % 调整图窗背景为白色
+% set(fig, 'Color', 'w');
+% 
+% 
+% PlotToFileColorPDF(fig, 'LC_R', 7.5, 5);
+%--------------------------------------------------------------------------LC增益（单图版）
+% clc; clear; close all;
+% 
+% fid = fopen('exp_data/LC_v.txt', 'r');
+% C = textscan(fid, '%s%s', 'Delimiter', '\t');
+% fclose(fid);
+% 
+% % % 读取txt数据
+% % data = readmatrix('exp_data/LC_v.txt');
+% 
+% % 提取横纵坐标
+% x = str2double(C{1});
+% tmp = split(string(C{2}), ',');
+% Re = str2double(tmp(:,1));
+% Im = str2double(tmp(:,2));
+% Z = Re + 1j*Im;
+% % Z_abs = abs(Z);
+% mag_db = 20*log10(abs(Z));
+% 
+% % 新建图窗
+% fig = figure;
+% 
+% % 绘图
+% % plot(x, mag_db, 'LineWidth', 1.2);
+% semilogx(x, mag_db, 'LineWidth', 1.2);
+% box on;
+% hold on;
+% 
+% plot(x(847), mag_db(847), 'ro', 'MarkerSize', 7, 'LineWidth', 1.2);   % 画点
+% 
+% x0 = x(847);
+% y0 = mag_db(847);
+% 
+% ax = gca;
+% x_min = ax.XLim(1);
+% y_min = ax.YLim(1);
+% % 画到纵坐标轴的投影线（纵线）
+% line([x0 x0], [y0 -80], 'Color', 'r', 'LineStyle', '--', 'LineWidth', 1);
+% 
+% % 画到纵坐标轴的投影线（横线）
+% line([x_min x0], [y0 y0], 'Color', 'r', 'LineStyle', '--', 'LineWidth', 1);
+% 
+% 
+% % 自动增加纵向留白
+% ylim([-72,16]);
+% % yticks(-340:170:340);
+% 
+% % 坐标轴标签
+% xlabel('频率(Hz)', 'FontName', '黑体', 'FontSize', 10);
+% ylabel('分贝(dB)', 'FontName', '黑体', 'FontSize', 10);
+% 
+% xticks([1e5 3.5e5 1e6]);
+% xticklabels({'100KHz','350KHz','1MHz'});
+% 
+% % yticks([1e1 1e2 1e3 1e4]);
+% % yticklabels({'1','10', '100','1000'});
+% yticks(-80:16:16);
+% 
+% text(x0*0.25, -15, sprintf('(%.3f KHz, %.2f)', x0/1e03, y0), ...
+%     'VerticalAlignment', 'bottom', ...
+%     'HorizontalAlignment', 'left', ...
+%     'FontSize', 8);
+% 
+% % 坐标轴字体
+% set(gca, 'FontName', 'Times New Roman', 'FontSize', 10, 'LineWidth', 1);
+% 
+% % 调整图窗背景为白色
+% set(fig, 'Color', 'w');
+% 
+% 
+% PlotToFileColorPDF(fig, 'LC_V', 7.5, 5);
+%--------------------------------------------------------------------------改进前的波形（电流、漏极电压）
+% clc; clear; close all;
+% 
+% % 读取数据
+% data = readmatrix('exp_data/u_i_no_improve.txt');
+% 
+% x = data(:,1)*1e6;
+% y1 = data(:,2);
+% y2 = data(:,3);
+% 
+% fig = figure;
+% 
+% %使用线型进行区分
+% % plot(x,y1,'k-','LineWidth',1.2); hold on
+% % plot(x,y2,'k--','LineWidth',1.2);
+% % % plot(x,y3,'k:','LineWidth',1.5)
+% %使用颜色进行区分
+% yyaxis left;
+% ax = gca;
+% ax.YAxis(1).Color = 'k';
+% ax.YAxis(2).Color = 'k';
+% % yticks(-10:10:110);
+% plot(x, y1, 'LineWidth', 1.2);
+% yticks([0 40 80 120]);
+% % yticklabels({'','10', '100','1000'});
+% ylim([-10 120]);
+% yl = ylabel('电压(V)','FontName','黑体','FontSize',10);
+% 
+% yyaxis right;
+% % yticks(-1:1:5);
+% plot(x, y2, 'LineWidth', 1.2);
+% ylim([-1 6]);
+% yr = ylabel('电流(A)','FontName','黑体','FontSize',10);
+% 
+% xlabel('时间(μs)','FontName','黑体','FontSize',10);
+% 
+% %设置上下留白空间，避免波形顶到窗口顶部
+% % lim = 450;
+% % step = 150;
+% % ylim([-300,lim]);
+% % yticks(-300:step:lim);
+% 
+% lgd = legend({'漏极电压','可调直流源输出电流'}, ...
+%        'FontName','黑体', ...
+%        'FontSize',9, ...
+%        'Location','northeast');
+% lgd.NumColumns = 2;
+% 
+% 
+% set(gca,...
+%     'FontName','Times New Roman',...
+%     'FontSize',10,...
+%     'LineWidth',1)
+% 
+% set(fig,'Color','w')
+% box on;
+% 
+% PlotToFileColorPDF(fig,'no_improve',15.5,5);
+%--------------------------------------------------------------------------改进后的波形（电流、漏极电压）
+% clc; clear; close all;
+% 
+% % 读取数据
+% data = readmatrix('exp_data/u_i_improve.txt');
+% 
+% x = data(:,1)*1e6;
+% y1 = data(:,2);
+% y2 = data(:,3);
+% 
+% fig = figure;
+% 
+% %使用线型进行区分
+% % plot(x,y1,'k-','LineWidth',1.2); hold on
+% % plot(x,y2,'k--','LineWidth',1.2);
+% % % plot(x,y3,'k:','LineWidth',1.5)
+% %使用颜色进行区分
+% yyaxis left;
+% ax = gca;
+% ax.YAxis(1).Color = 'k';
+% ax.YAxis(2).Color = 'k';
+% % yticks(-10:10:110);
+% plot(x, y1, 'LineWidth', 1.2);
+% yticks([0 40 80 120]);
+% % yticklabels({'','10', '100','1000'});
+% ylim([-10 120]);
+% yl = ylabel('电压(V)','FontName','黑体','FontSize',10);
+% 
+% yyaxis right;
+% % yticks(-1:1:5);
+% plot(x, y2, 'LineWidth', 1.2);
+% ylim([-1 6]);
+% yr = ylabel('电流(A)','FontName','黑体','FontSize',10);
+% 
+% xlabel('时间(μs)','FontName','黑体','FontSize',10);
+% 
+% %设置上下留白空间，避免波形顶到窗口顶部
+% % lim = 450;
+% % step = 150;
+% % ylim([-300,lim]);
+% % yticks(-300:step:lim);
+% 
+% lgd = legend({'漏极电压','可调直流源输出电流'}, ...
+%        'FontName','黑体', ...
+%        'FontSize',9, ...
+%        'Location','northeast');
+% lgd.NumColumns = 2;
+% 
+% 
+% set(gca,...
+%     'FontName','Times New Roman',...
+%     'FontSize',10,...
+%     'LineWidth',1)
+% 
+% set(fig,'Color','w')
+% box on;
+% 
+% PlotToFileColorPDF(fig,'improve',15.5,5);
+%--------------------------------------------------------------------------变压器次极两端电压波形（多图版）
+clc; clear; close all;
+
+% 读取数据
+data = readmatrix('exp_data/mos_driver.txt');
+
+x = data(:,1)*1e6;
+y1 = data(:,2);
+y2 = data(:,3);
+y3 = data(:,4);
+fig = figure;
+
+%使用线型进行区分
+% plot(x,y1,'k-','LineWidth',1.2); hold on
+% plot(x,y2,'k--','LineWidth',1.2);
+% % plot(x,y3,'k:','LineWidth',1.5)
+%使用颜色进行区分
+yyaxis left;
+ax = gca;
+ax.YAxis(1).Color = 'k';
+ax.YAxis(2).Color = 'k';
+% yticks(-10:10:110);
+plot(x, y1, 'color', [0 114 189]/255,'LineWidth', 1.2);hold on;
+plot(x, y2, 'color', [217, 83, 24]/255,'LineStyle', '-','LineWidth', 1.2);
+yticks([-2 0 4 8 12 16]);
+% yticklabels({'','10', '100','1000'});
+ylim([-2 16]);
+yl = ylabel('电压(V)','FontName','黑体','FontSize',10);
+
+yyaxis right;
+yticks(-2:2:8);
+plot(x, y3, 'color', [236, 176, 32]/255,'LineWidth', 1.2);
+ylim([-2 8]);
+yr = ylabel('电流(A)','FontName','黑体','FontSize',10);
+
+xlim([0 9]);
+xlabel('时间(μs)','FontName','黑体','FontSize',10);
+
+%设置上下留白空间，避免波形顶到窗口顶部
+% lim = 450;
+% step = 150;
+% ylim([-300,lim]);
+% yticks(-300:step:lim);
+
+lgd = legend({'栅源电压','驱动器输入电压', '漏极电流'}, ...
+       'FontName','黑体', ...
+       'FontSize',9, ...
+       'Location','northeast');
+lgd.NumColumns = 3;
+
+
+set(gca,...
+    'FontName','Times New Roman',...
+    'FontSize',10,...
+    'LineWidth',1)
+
+set(fig,'Color','w')
+box on;
+
+PlotToFileColorPDF(fig,'mos_driver',15.5,6)
