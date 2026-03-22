@@ -5,7 +5,7 @@
 \usepackage{enumitem}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%——by MCH
 %编译范围
-\includeonly{chapter/chapter03, chapter/chapter04} % 需要编译的章节，编译时直接在相应章节编译即可，无需切换界面
+\includeonly{chapter/chapter01, chapter/chapter04, chapter/chapter02, chapter/chapter03} % 需要编译的章节，编译时直接在相应章节编译即可，无需切换界面
 %参考文献设置
 \usepackage[backend=biber,style=gb7714-2015,gbalign=gb7714-2015,gbpub=false,gbnamefmt = lowercase]{biblatex}% 可试着设style=gb7714-1987
 \addbibresource[location=local]{biblibrary/MyLibrary.bib} % 如果在其他盘，改为相对路径。比如F盘，改为：F/MyLibrary.bib
@@ -47,75 +47,75 @@
 \providecommand{\tabularnewline}{\\}
 \makeatother
 \begin{document}
-	%%%%%%%%%%%%%草稿封面设置%%%%%%%%%%%%%使用“正式封面”时不需要理会这部分
-	\title{LaTeX模板使用说明}	
-	\author{作者姓名}	
-	\supervisor{指导教师：xxx\ 教授}	
-	\institute{华南理工大学}	
-	\date{2025年1月6日}
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	\maketitle	
-	\frontmatter	%此后为罗马数字页码，页面类型为plain
-	\include{chapter/abstract} % 中英文摘要
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	% 目录、表格目录、插图目录这几个字本身的大纲级别是一级的，即和章名有相同的字号字体。目录表的内容通过titletoc宏包在。cls文件设置了。
-	%\cleardoublepage % pdfbookmark可能需要这一条才能正常工作
-	\pdfbookmark{\contentsname}{toc} %为目录添加pdf文件书签
-	\tableofcontents	%目录
-	% \listoffigures	%插图目录（可选）
-	% \listoftables	%表格目录（可选）
-	
-	\begingroup
-		\renewcommand*{\addvspace}[1]{}
-		\newcommand{\loflabel}{图} 
-		\renewcommand{\numberline}[1]{\loflabel~#1\hspace*{1em}}	
-		\listoffigures
-		
-		\newcommand{\lotlabel}{表}
-		\renewcommand{\numberline}[1]{\lotlabel~#1\hspace*{1em}}
-		\listoftables
-	\endgroup
+%%%%%%%%%%%%%草稿封面设置%%%%%%%%%%%%%使用“正式封面”时不需要理会这部分
+\title{LaTeX模板使用说明}
+\author{作者姓名}
+\supervisor{指导教师：xxx\ 教授}
+\institute{华南理工大学}
+\date{2025年1月6日}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\maketitle
+\frontmatter	%此后为罗马数字页码，页面类型为plain
+\include{chapter/abstract} % 中英文摘要
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 目录、表格目录、插图目录这几个字本身的大纲级别是一级的，即和章名有相同的字号字体。目录表的内容通过titletoc宏包在。cls文件设置了。
+%\cleardoublepage % pdfbookmark可能需要这一条才能正常工作
+\pdfbookmark{\contentsname}{toc} %为目录添加pdf文件书签
+\tableofcontents	%目录
+% \listoffigures	%插图目录（可选）
+% \listoftables	%表格目录（可选）
 
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	\include{chapter/symbols}	% 符号对照表(可选)
-	\include{chapter/abbreviation} 	% 缩略词	
-	
-	\mainmatter %此后为阿拉伯数字页码
-	
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%页眉页脚设置 ——by MCH 
-    \fancypagestyle{plain}{
-    	\pagestyle{fancy}
-    }	% 每章的第一页会默认使用plain，没有页眉。通过重定义plain为fancy解决
-    \pagestyle{fancy}	%设置页眉页脚为fancy
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%分章节，结合导言区的\includeonly命令可仅编译部分章节，编译时不用切换界面，直接在相应章节编译即可。
-	\include{chapter/chapter01}%第一章
-	\include{chapter/chapter02}%第二章
-	\include{chapter/chapter03}%第三章
-	\include{chapter/chapter04}
-	% \include{chapter/chapter05} % 新增公式字体设置，需要引入字体包unicode-math然后通过setmainfont设置不同字体（unicode-math包默认Latin Modern Math字体，而latex默认Computer Modern Math字体）， Computer Modern Math也是模板一直以来使用的字体。这里提供给需要更多字体的同学探索。模版的修改在scutthesis.cls文件82-85行。若希望探索各种常用数学符号的区别，直接编译math_font文件夹的各种测试文件。注意新的字体包unicode-math包下，加粗，花体等命令都有一定的改变，要适当替换一下。可以在测试文件做好测试再使用。
-	% 自行根据需要添加章节。注意要包含正确路径
+\begingroup
+\renewcommand*{\addvspace}[1]{}
+\newcommand{\loflabel}{图}
+\renewcommand{\numberline}[1]{\loflabel~#1\hspace*{1em}}
+\listoffigures
 
-	\backmatter %章节不编号但页码继续
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    微调，使得后续章节的页眉不带章号——by MCH
-	\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	\include{chapter/conclusion} %结论
-	 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% bibtex参考文献设置  （原版）
+\newcommand{\lotlabel}{表}
+\renewcommand{\numberline}[1]{\lotlabel~#1\hspace*{1em}}
+\listoftables
+\endgroup
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\include{chapter/symbols}	% 符号对照表(可选)
+\include{chapter/abbreviation} 	% 缩略词	
+
+\mainmatter %此后为阿拉伯数字页码
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%页眉页脚设置 ——by MCH 
+\fancypagestyle{plain}{
+	\pagestyle{fancy}
+}	% 每章的第一页会默认使用plain，没有页眉。通过重定义plain为fancy解决
+\pagestyle{fancy}	%设置页眉页脚为fancy
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%分章节，结合导言区的\includeonly命令可仅编译部分章节，编译时不用切换界面，直接在相应章节编译即可。
+\include{chapter/chapter01}%第一章
+\include{chapter/chapter02}%第二章
+\include{chapter/chapter03}%第三章
+\include{chapter/chapter04}
+% \include{chapter/chapter05} % 新增公式字体设置，需要引入字体包unicode-math然后通过setmainfont设置不同字体（unicode-math包默认Latin Modern Math字体，而latex默认Computer Modern Math字体）， Computer Modern Math也是模板一直以来使用的字体。这里提供给需要更多字体的同学探索。模版的修改在scutthesis.cls文件82-85行。若希望探索各种常用数学符号的区别，直接编译math_font文件夹的各种测试文件。注意新的字体包unicode-math包下，加粗，花体等命令都有一定的改变，要适当替换一下。可以在测试文件做好测试再使用。
+% 自行根据需要添加章节。注意要包含正确路径
+
+\backmatter %章节不编号但页码继续
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    微调，使得后续章节的页眉不带章号——by MCH
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\include{chapter/conclusion} %结论
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% bibtex参考文献设置  （原版）
 %%	\bibliographystyle{scutthesis}
 %%	\bibliography{F:/MyLibrary}
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% biber参考文献设置	——by MCH
-	%\renewcommand*{\bibfont}{\refbodyfont}			% 设置文献著录字号比正文小一号（五号），需要小四号请注释该行. % 不推荐使用small，而是使用cls文件中精确定义了的字号。
-	\phantomsection % “目录”中的链接能正确跳转，需要添加 \phantomsection 否则点击参考文献会跳转到结论
-	\addcontentsline{toc}{chapter}{参考文献}	%目录中添加参考文献
-	\printbibliography	% 参考文献著录
- 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
- 	% 只有一个附录
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% biber参考文献设置	——by MCH
+%\renewcommand*{\bibfont}{\refbodyfont}			% 设置文献著录字号比正文小一号（五号），需要小四号请注释该行. % 不推荐使用small，而是使用cls文件中精确定义了的字号。
+\phantomsection % “目录”中的链接能正确跳转，需要添加 \phantomsection 否则点击参考文献会跳转到结论
+\addcontentsline{toc}{chapter}{参考文献}	%目录中添加参考文献
+\printbibliography	% 参考文献著录
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 只有一个附录
 % 	\include{chapter/appendix}
- 	% 有多个附录
-	\include{chapter/appendix1} %附录1
-	\include{chapter/appendix2} %附录2
- 	%%%%%%%%%%%%%%%%%%%
-	\include{chapter/pub} %成果
-	\include{chapter/ack} %致谢
+% 有多个附录
+\include{chapter/appendix1} %附录1
+\include{chapter/appendix2} %附录2
+%%%%%%%%%%%%%%%%%%%
+\include{chapter/pub} %成果
+\include{chapter/ack} %致谢
 \end{document}

@@ -13,41 +13,41 @@
 基于上述分析，本文选用明纬公司生产的RPS-300-48和RPT-60B两组医疗级电源模块。其中前者用于为高频能量发生主电路提供48V直流电源，后者则用于为系统低压辅助电源管理电路提供多路低压输出。两组医疗电源模块的主要工作参数如表\ref{medical_power}所示。
 
 \begin{table}[htbp]
-    \caption{\label{medical_power}医疗级开关电源主要工作参数}
-    \centering
-    \small
-    \setlength{\tabcolsep}{20pt}
+	\caption{\label{medical_power}医疗级开关电源主要工作参数}
+	\centering
+	\small
+	\setlength{\tabcolsep}{20pt}
 	\begin{tabular}{ c c c }
-        \hline
-        参数 & RPS-300-48 & RPT-60B\\
-        \hline
-        输出电压            &  48V  & ±12V/5V\\
-        输出功率（自然风冷）            &  200W & 50W\\
-        电压精度            &  ±2.0\%  & ±3.0\% / ±6.0\%\\ 
-        效率               &  93\%  & 78\%\\
-        \hline
-    \end{tabular}
+		\hline
+		参数         & RPS-300-48 & RPT-60B         \\
+		\hline
+		输出电压       & 48V        & ±12V/5V         \\
+		输出功率（自然风冷） & 200W       & 50W             \\
+		电压精度       & ±2.0\%     & ±3.0\% / ±6.0\% \\
+		效率         & 93\%       & 78\%            \\
+		\hline
+	\end{tabular}
 \end{table}
 
 \subsection{低压辅助电源设计}
 在本文所设计的的电源系统中，低压辅助电源需要给控制单元芯片、继电器、运算放大器、功率器件驱动电路、隔离电路以及采样电路等进行优质可靠供电。根据系统芯片的供电需求，辅助电源需提供+12V、-12V、5V和3.3V四种不同电压等级的低压电源。同时，为降低高频输出信号对控制系统的干扰，并满足电外科发生器的安全要求，系统还需为隔离区模块及外设检测电路提供独立的隔离电源。
 
 \begin{figure}[htbp]
-\centering
-\begin{minipage}[c]{0.5\textwidth}
-\centering
-\includegraphics[scale=0.24]{Fig/power_structure.pdf} %1:1导入
-\end{minipage}%
-\begin{minipage}[c]{0.5\textwidth}
-\centering
-\includegraphics[scale=0.23]{Fig/Flyback.pdf}
-\end{minipage}\\[1pt]
-\begin{minipage}[t]{0.5\textwidth} % 以下为新添加页面划分，[t]表示行顶部对齐
-\caption{\label{power_structure}低压辅助电源架构}
-\end{minipage}%
-\begin{minipage}[t]{0.5\textwidth}
-\caption{\label{Flyback}反激变换器拓扑结构}
-\end{minipage}%
+	\centering
+	\begin{minipage}[c]{0.5\textwidth}
+		\centering
+		\includegraphics[scale=0.24]{Fig/power_structure.pdf} %1:1导入
+	\end{minipage}%
+	\begin{minipage}[c]{0.5\textwidth}
+		\centering
+		\includegraphics[scale=0.23]{Fig/Flyback.pdf}
+	\end{minipage}\\[1pt]
+	\begin{minipage}[t]{0.5\textwidth} % 以下为新添加页面划分，[t]表示行顶部对齐
+		\caption{\label{power_structure}低压辅助电源架构}
+	\end{minipage}%
+	\begin{minipage}[t]{0.5\textwidth}
+		\caption{\label{Flyback}反激变换器拓扑结构}
+	\end{minipage}%
 \end{figure}
 
 本设计方案中低压辅助电源架构如图\ref{power_structure}所示，医疗级开关电源模块RPT-60B输出±12V、5V电源首先经过共模与差模滤波电路，以抑制开关噪声及电源纹波。对于非隔离区供电部分，采用线性稳压器（LDO）SPX1117由5V电源进一步生成3.3V电源，为 MCU 及低噪声敏感的数字控制电路提供稳定供电；对于隔离区供电部分，则采用隔离电源模块H0505S和H1212S，分别生成±5V和12V的隔离直流电源，其中5V隔离电源经线性稳压器进一步转换为3.3V隔离电源，用于为隔离区的主控处理器和采样通信电路稳定供电，从而实现控制侧与功率输出侧之间的电气隔离。
@@ -61,30 +61,30 @@
 可调式直流降压稳压电路本质上是一种可调节输出电压的Buck降压变换器，其输入为电源模块提供的48V输入电源，输出为可调节范围为2.5V-48V的直流电压，通过调整反馈引脚处的偏置电压来调节输出的直流电压值。本文选择使用降压型稳压芯片LT1074HV为核心器件构建可调直流稳压源电路如图\ref{buck_adjust}所示，其中LT1074构成可调降压稳压电路，TLC5615数模转换芯片与LM358运算放大器构成偏置电压调节电路。
 
 \begin{figure}[htbp]
-% 该图片比例为多次调试过后的最大值，再大就要溢出了
-\centering
-\includegraphics[scale=0.259]{Fig/buck_adjust.pdf}
-\caption{\label{buck_adjust}可调直流稳压源电路}
+	% 该图片比例为多次调试过后的最大值，再大就要溢出了
+	\centering
+	\includegraphics[scale=0.259]{Fig/buck_adjust.pdf}
+	\caption{\label{buck_adjust}可调直流稳压源电路}
 \end{figure}
 
 LT1074是一款高压高电流 DC-DC 开关稳压器芯片，内部集成了功率开关管、驱动控制振荡器、误差放大器、反馈调节环路以及过流保护等模块。在输出电压调节工作过程中，芯片内部振荡器以 100 kHz 的固定开关频率驱动内部功率开关管进行周期性导通与关断，实现对输入电压的脉宽调制（PWM）控制。当输出电压升高时，经分压电阻$R_2$、$R_3$形成的反馈电压VFB随之上升并高于芯片内部2.21V的基准参考电压，则误差放大器检测到正向偏差，并通过内部补偿与振荡控制环节减小开关管驱动信号的占空比，从而单位周期内传递至负载的能量降低，输出电压下降并恢复至稳态值。当输出电压降低时反之，该负反馈调节机制保证了稳压芯片在输入电压波动或负载变化条件下仍然能维持输出电压的稳定。在稳态工作条件下，输出电压和偏置电压满足关系式如下：
 \begin{equation}
-\frac{V_{VCT}-V_{VFB}}{R_3} = \frac{V_{VFB}-V_{C_3}}{R_2} \label{eq_3}
+	\frac{V_{VCT}-V_{VFB}}{R_3} = \frac{V_{VFB}-V_{C_3}}{R_2} \label{eq_3}
 \end{equation}
 式中，$V_{VCT}$为可调直流源输出电压，$V_{VFB}$为稳压器芯片反馈端输入电压，$V_{C_3}$为系统引入的偏置电压。为实现对偏置电压的数字化调节，本文采用数模转换器（DAC）结合运算放大器构成偏置电压数字控制电路。TLC5615是一款10位串行输入、电压输出型DAC芯片，其输入为二进制数字信号，输出为与输入数字量成比例的线性模拟电压。芯片输出电压范围为0～$V_{REF}$ 的两倍，其中参考电压由基准源芯片LM336Z提供2.5V稳定基准。非隔离区主控单元通过串行外设接口SPI（Serial Peripheral Interface Bus）向TLC5615发送待转换的数字量，DAC输出相应的模拟电压信号。为满足偏置电压极性及调节方向的要求，本文采用LM358双运算放大器中的一个运放单元构成反相放大器电路，对 DAC 输出电压进行极性变换与比例调整，使数字控制量的变化方向与可调直流稳压源输出电压的调节方向保持一致，从而保证系统控制逻辑的单调性与可预测性。
 
 偏置电压调节过程中，由于LT1074内部使用的基准电压$V_{FB}$为2.21V，$V_{C_3}$处的偏置电压需满足0-2.21V的电压范围才能正常工作。根据图\ref{buck_adjust}所示的运算放大器电路，TLC5615的输出电压$V_{OUT}$与偏置电压满足如下关系式：
 \begin{equation}
-V_{C_3} = \frac{R_4}{R_5}(2.5V-V_{OUT})+2.5V = 5V - V_{OUT}  \label{eq_1}
+	V_{C_3} = \frac{R_4}{R_5}(2.5V-V_{OUT})+2.5V = 5V - V_{OUT}  \label{eq_1}
 \end{equation}
 
 由数模转换芯片DAC的工作原理可知，TLC5615的输出电压$V_{OUT}$与输入的数字信号$D_{IN}$满足如下关系式：
 \begin{equation}
-V_{OUT} = 2V_{REF}\times\frac{D_{IN}}{2^{10}} = 5V \times \frac{D_{IN}}{1024}  \label{eq_2}
+	V_{OUT} = 2V_{REF}\times\frac{D_{IN}}{2^{10}} = 5V \times \frac{D_{IN}}{1024}  \label{eq_2}
 \end{equation}
 其中，$V_{REF}$为DAC的参考电压，且TLC5615芯片的内部增益设定为2。根据前文分析可知，偏置电压满足$V_{C_3} < 2.21V$，将条件代入式(\ref{eq_1})可得输出电压满足$V_{OUT} > 2.79V$，进一步结合式(\ref{eq_2})可推得，非隔离区MCU输入的数字信号$D_{IN}$的有效取值范围为$571 < D_{IN} < 1024$，当数字输入信号增加至最大值时，DAC输出电压相应提高，使可调直流稳压源的偏置电压趋近于0，此时稳压器输出电压达到最大值。综合式(\ref{eq_3})、(\ref{eq_1})和(\ref{eq_2})可得，数字控制量和被控可调直流源输出电压的稳态关系为：
 \begin{equation}
-V_{VCT} = \frac{R_2+R_3}{R_2}V_{VFB} - \frac{5R_3}{R_2} + \frac{5R_3}{1024R_2}D_{IN} \approx \frac{1}{11.32}D_{IN} - 48.27V 
+	V_{VCT} = \frac{R_2+R_3}{R_2}V_{VFB} - \frac{5R_3}{R_2} + \frac{5R_3}{1024R_2}D_{IN} \approx \frac{1}{11.32}D_{IN} - 48.27V
 \end{equation}
 
 综上所述，通过改变输入数字控制量$D_{IN}$，可以改变稳压器的反馈偏置电压，最终实现对馈入推挽逆逆变电路的可调直流母线电压的调节。由于推挽逆变器输出功率与直流母线电压幅值密切相关，因此该控制方式实现了对高频信号输出功率的可调控制，控制量采用 452 档离散调节方式，被控可调直流稳压源输出电压分辨率约为0.088V。
@@ -96,69 +96,69 @@ V_{VCT} = \frac{R_2+R_3}{R_2}V_{VFB} - \frac{5R_3}{R_2} + \frac{5R_3}{1024R_2}D_
 
 结合推挽逆变电路的拓扑结构，前级可调直流电压源从变压器初级线圈的中心抽头输入，当单个MOSFET导通期间，变压器初级线圈的另一半将会电磁感应产生与输入直流电压源大小相同的感应电压叠加在漏源两端，因此单个MOSFET的耐压值最小应为输入电压源的两倍。本文设计的可调直流电压源输出电压范围为2.5V-48V，因此MOSFET的耐压值应不小于96V。考虑到实际应用中可能出现的电压尖峰等问题，选择耐压值大于150V的MOSFET芯片作为功率开关器件。对于开关频率而言，由于系统输出信号频率为350KHz，推挽逆变电路开关周期为2857ns，每个MOSFET导通半个周期，考虑到一定的驱动信号死区时间设置裕度，单个开关管导通时间至少为1329ns，因此所选开关器件的上升时间和下降时间必须远小于此值，才能保证正常的开通和关断。在开关器件损耗方面，选择导通电阻和门级电荷较小的MOSFET芯片以降低开关损耗和导通损耗，提高系统效率。综上所述经过综合选型，最终选择型号为IRF640N的MOSFET芯片作为功率开关器件，其主要工作参数如表\ref{IRF640N}所示。
 \begin{table}[htbp]
-    \caption{\label{IRF640N}IRF640N主要工作参数}
-    \centering
-    \small
-    \setlength{\tabcolsep}{20pt}
+	\caption{\label{IRF640N}IRF640N主要工作参数}
+	\centering
+	\small
+	\setlength{\tabcolsep}{20pt}
 	\begin{tabular}{c c c c }
-        \hline
-        参数 & 数值 & 参数 & 数值 \\
-        \hline
-        最大漏源电压  & 200V  & 漏源导通电阻 & 0.15$\Omega$ @10V\\
-        最大栅源电压  & $\pm$20V & 门级电荷 & 67 nC \\
-        最大连续漏源电流 & 18A @25℃    & 上升时间 & 19ns \\
-        最大耗散功率 & 150W @25℃  & 下降时间 & 5.5ns \\
-        \hline
-    \end{tabular}
+		\hline
+		参数       & 数值        & 参数     & 数值                \\
+		\hline
+		最大漏源电压   & 200V      & 漏源导通电阻 & 0.15$\Omega$ @10V \\
+		最大栅源电压   & $\pm$20V  & 门级电荷   & 67 nC             \\
+		最大连续漏源电流 & 18A @25℃  & 上升时间   & 19ns              \\
+		最大耗散功率   & 150W @25℃ & 下降时间   & 5.5ns             \\
+		\hline
+	\end{tabular}
 \end{table}
 
 为保证所选MOSFET功率器件在高频开关条件下具有良好的动态特性并见可能降低开关损耗，驱动芯片的的选型必须满足高峰值驱动电流、较短的上升/下降时间以及良好的抗干扰能力等要求。从驱动侧需求分析可知，MOSFET 的开关速度本质上取决于其门极电荷的充放电速率，由$I_{gate} = Q_g / t_{sw}$可知，若需将开关过渡时间$t_{sw}$控制在ns量级，以减缩短电压与电流重叠区间降低开关损耗，则驱动芯片必须具备安培级瞬时电流输出能力，同时驱动器自身的上升/下降时间也应尽可能小，因此不宜使用一般控制芯片直接驱动而需使用专用的驱动芯片。此外，为使 MOSFET 在导通状态下进入深度饱和区工作，驱动芯片提供的驱动电压幅值需满足器件推荐的门极驱动电压要求，从而有效降低导通电阻 $R_{DS(on)}$，减少导通损耗并提高系统效率。综合上述分析，本文选择型号为TC4420的MOSFET驱动芯片，其主要工作参数如表\ref{TC4420}所示。该芯片支持TTL/CMOS电平兼容输入，可由MCU直接驱动，且具备6A的峰值驱动电流输出能力，能够满足IRF640N在350KHz开关频率下的快速通断需求。
 \begin{table}[htbp]
-    \caption{\label{TC4420}TC4420主要工作参数}
-    \centering
-    \small
-    \setlength{\tabcolsep}{20pt}
+	\caption{\label{TC4420}TC4420主要工作参数}
+	\centering
+	\small
+	\setlength{\tabcolsep}{20pt}
 	\begin{tabular}{c c c c }
-        \hline
-        参数 & 数值 & 参数 & 数值 \\
-        \hline
-        输出电压  & VDD – 0.025  & 上升时间 & 25ns\\
-        输出阻抗  & 2.0$\Omega$ & 下降时间 & 25ns \\
-        峰值驱动电流 & 6A @25℃    & 传输延迟 & 55ns \\
-        \hline
-    \end{tabular}
+		\hline
+		参数     & 数值          & 参数   & 数值   \\
+		\hline
+		输出电压   & VDD – 0.025 & 上升时间 & 25ns \\
+		输出阻抗   & 2.0$\Omega$ & 下降时间 & 25ns \\
+		峰值驱动电流 & 6A @25℃     & 传输延迟 & 55ns \\
+		\hline
+	\end{tabular}
 \end{table}
 
 \subsubsection{电路结构设计}
 基于IRF640N MOSFET和TC4420驱动芯片，本文所设计的推挽逆变电路结构如图\ref{inverter}所示。其中，$Q_1$、$Q_2$为两个MOSFET开关器件，其漏极分别连接至带有中心抽头的变压器初级绕组两端，前级可调直流源输出端VCT通过变压器中心抽头向初级绕组馈入直流能量，在驱动信号作用下，两只 MOSFET 交替导通，实现直流母线电压的高频换向，从而在变压器次级感应产生 350 kHz 的高频交流方波电压。电路中，$L_{iso}$与$C_{bulk}$构成输入侧隔离储能网络，用于抑制母线电流脉动并提供瞬态电流支撑；$C_1 D_1 R_7$与$C_2 D_2 R_8$分别构成RCD吸收电路，用于吸收关断瞬间应漏感产生的尖峰电压，降低开关器件的电压应力；$R_1 R_3 R_5$与$R_2 R_4 R_6$则构成驱动、保护及采样网络。逆变后变压器次极两端输出的高频交流方波信号经LC谐振网络进行选频与滤波，得到近似正弦波电压后输出至负载端。
 \begin{figure}[htbp]
-% 该图片比例为多次调试过后的最大值，再大就要溢出了
-\centering
-\includegraphics[scale=0.253]{Fig/inverter.pdf}
-\caption{\label{inverter}推挽逆变电路}
+	% 该图片比例为多次调试过后的最大值，再大就要溢出了
+	\centering
+	\includegraphics[scale=0.253]{Fig/inverter.pdf}
+	\caption{\label{inverter}推挽逆变电路}
 \end{figure}
 
 TC4420驱动芯片的输入驱动信号由控制单元MCU的IO端口直接提供，由于驱动器和MOSFET在开关时刻均存在无法忽略的延迟和上升/下降时间，当两只桥臂MOSFET在换向瞬间发生时间重叠，即一只器件尚未完全关断而另一只器件已开始导通时，桥臂将形成瞬时直通通路，此时电流仅受绕组电阻和漏感的限制，产生极大的电流冲击，将直接导致MOS管和驱动芯片击穿。为了避免这一直通现象，需在互补驱动信号中插入适当的死区时间，如图\ref{dead_time}所示。死区时间的设置需结合MOSFET和驱动器的器件参数确定，过短的死区时间可能无法完全避免直通现象，而过长的死区时间则会降低系统效率。死区时间计算方法如下：
 \begin{equation}
-t_{dead} \geq (t_{DMAX} - t_{DMIN}) + \max (t_{d(off)} + t_{f}, t_{d(on)} + t_{r}) + t_{margin} \approx 100ns
+	t_{dead} \geq (t_{DMAX} - t_{DMIN}) + \max (t_{d(off)} + t_{f}, t_{d(on)} + t_{r}) + t_{margin} \approx 100ns
 \end{equation}
 其中，$t_{DMAX}$与$t_{DMIN}$分别为驱动器的最大和最小传输延迟；$t_{d(off)}$与$t_{d(on)}$为MOSFET的关断和导通延迟时间；$t_{f}$与$t_{r}$为MOSFET的下降和上升时间；$t_{margin}$为设计裕量。根据IRF640N和TC4420的器件参数，可得理论死区时间应不小于79ns，在实际设计中额外预留21ns的裕量，用于补偿PCB布线等不确定因素，最终将死区时间设为100 ns。
 \begin{figure}[htbp]
-% 该图片比例为多次调试过后的最大值，再大就要溢出了
-\centering
-\includegraphics[scale=0.3]{Fig/dead_time.pdf}
-\caption{\label{dead_time}驱动信号死区时间示意图}
+	% 该图片比例为多次调试过后的最大值，再大就要溢出了
+	\centering
+	\includegraphics[scale=0.3]{Fig/dead_time.pdf}
+	\caption{\label{dead_time}驱动信号死区时间示意图}
 \end{figure}
 
 根据推挽逆变器的工作原理，其变压器中心抽头输入电流在开关管交替导通时分别流经一半的初级绕组，当次极负载存在谐振网络时，负载电流在谐振作用调制下其电流波形表现为平滑的弧形变化，在开关周期内呈现明显的脉动特性。由于推挽结构在一个完整开关周期内存在两次能量传输过程，因此输入侧电流的脉动频率为开关频率的两倍，即 700 kHz。对于前级可调直流稳压源而言，负载电流的高频脉动特性将直接叠加在输出端，导致输出电容承受较大纹波电流应力。当系统输出功率较高时，脉动电流的峰值可能会超出电源芯片内部电流限幅阈值，考虑到开关频率仅为100KHz，其内部限流与关断控制逻辑响应速度有限，从而可能引发输出电压塌陷或芯片烧毁等严重问题。
 
 为抑制高频电流的脉动并降低母线电压输出纹波，本文在推挽逆变器输入端引入由$L_{iso}$与$C_{bulk}$构成的隔离储能网络。其中$L_{iso}$提供高频阻抗以抑制电流脉动，而$C_{bulk}$则提供低频储能并优先提供脉动能量，从而前级电源仅需输出低频变化的平均电流，而高频脉动部分在负载本地回路内循环。从能量的角度分析，储能网络的引入使得系统由单极能量直接传递结构转变为二级能量缓冲结构，前级电源向储能网络提供稳定的直流电压及平均功率，而储能网络则以高频脉动的形式向负载侧传递能量。由于$C_{bulk}$的本质功能是在高频脉动期间向变压器初级提供瞬态电荷，其容量可依据允许母线电压跌落幅度进行估算。根据电荷守恒关系：
 \begin{equation}
-C_{bulk} \geq \frac{\Delta Q}{\Delta V_{bulk}} = \frac{I_{pulse}}{2f_{sw}\times\Delta V_{bulk}} = \frac{10A}{700KHz\times 0.15V} \approx 100\mu F
+	C_{bulk} \geq \frac{\Delta Q}{\Delta V_{bulk}} = \frac{I_{pulse}}{2f_{sw}\times\Delta V_{bulk}} = \frac{10A}{700KHz\times 0.15V} \approx 100\mu F
 \end{equation}
 式中，$I_{pulse}$为脉冲电流的峰值，$f_{sw}$为开关频率，$\Delta V_{bulk}$为母线电压允许的最大跌落幅度。经过仿真实验分析，取脉冲电流峰值10A，母线电压允许跌落幅度0.15V，得到$C_{bulk}$约为100$\mu F$。在实际电路设计中，采用多颗低ESL的陶瓷电容并联实现等效100uF容量，并将其贴近变压器中心抽头摆放，以充分降低寄生电感并降低高频阻抗。在此容值下，为避免储能网络在工作频率附近产生谐振放大效应，其固有谐振频率应远离开关频率及脉动频率，$L_{iso}$与谐振频率$f_{0}$关系如下：
 \begin{equation}
-L_{iso} = \frac{1}{4\pi^2f_{0}^2C_{bulk}} = \frac{1}{4\pi^2\times(10KHz)^2\times 100\mu F} \approx 2.2\mu H 
+	L_{iso} = \frac{1}{4\pi^2f_{0}^2C_{bulk}} = \frac{1}{4\pi^2\times(10KHz)^2\times 100\mu F} \approx 2.2\mu H
 \end{equation}
 选取$f_{0}$为10KHz，代入$C_{bulk}$可得$L_{iso}$约为2.2$\mu H$，由于该电感需承载较大平均电流，实际电路中需选取直流电阻DCR较小，且具备较高饱和电流$I_{sat}$的电感器件。
 
@@ -171,7 +171,7 @@ L_{iso} = \frac{1}{4\pi^2f_{0}^2C_{bulk}} = \frac{1}{4\pi^2\times(10KHz)^2\times
 
 根据前文所给出的系统设计指标，高频电外科发生器在500$\Omega$额定负载下要求最大输出功率达到100W，由纯电阻负载下的功率关系式可得：
 \begin{equation}
-P = \frac{V^2}{R} \Rightarrow V_{peak} =\sqrt{2}\sqrt{PR} = \sqrt{2}\sqrt{100W\times 500\Omega} = 316.2V
+	P = \frac{V^2}{R} \Rightarrow V_{peak} =\sqrt{2}\sqrt{PR} = \sqrt{2}\sqrt{100W\times 500\Omega} = 316.2V
 \end{equation}
 式中，$P$为负载消耗功率，$V_{peak}$为负载两端电压峰值，$R$为负载阻抗。由3.3.1节可知，前级可调直流源向推挽逆变电路提供的最大直流输入电压为48V，为在额定负载实现最大316.2V的输出峰值电压，高频信号放大电路须实现不低于$\frac{316.2V}{48V} \approx 6.6$倍的电压增益。本文设计变压器的放大倍数为4倍，LC谐振网络的放大倍数为$\frac{316.2V}{48V}\approx 1.65$倍。
 
@@ -179,105 +179,105 @@ P = \frac{V^2}{R} \Rightarrow V_{peak} =\sqrt{2}\sqrt{PR} = \sqrt{2}\sqrt{100W\t
 变压器是一种基于电磁感应原理实现电能传递与电压变换的电磁器件，通过合理设计线圈的匝数比可以实现电压的升降变换，同时由于能量通过交变磁场进行耦合传递，初级与次级之间具有良好的电气隔离的特性。在本系统推挽逆变结构中，变压器工作在350KHz频率下，与传统50Hz工频变压器相比电磁参数与损耗机理呈现显著差异。在高频激励下，绕组之间的漏感及分布电容无法忽略，易与外部电路形成高频谐振，在开关瞬态过程引发电压尖峰和振荡；同时导体在高频电流作用下出现明显的集肤效应和邻近效应，使得等效交流电阻和铜损显著提升。高频变压器包含寄生参数的的三电容等效电路如图\ref{transformer}所示\cite{YangYang_gaopinbianyaqifenbucanshumoxingjianlijiqiceshifangfayanjiu_2016}。
 
 \begin{figure}[htbp]
-% 该图片比例为多次调试过后的最大值，再大就要溢出了
-\centering
-\includegraphics[scale=0.25]{Fig/transformer.pdf}
-\caption{\label{transformer}高频变压器三电容等效电路图}
+	% 该图片比例为多次调试过后的最大值，再大就要溢出了
+	\centering
+	\includegraphics[scale=0.25]{Fig/transformer.pdf}
+	\caption{\label{transformer}高频变压器三电容等效电路图}
 \end{figure}
 图\ref{transformer}中，$R_{p}$、$C_{p}$、$L_{lk1}$分别表示初级绕组的等效电阻、分布电容和漏感，$R_{s}$、$C_{s}$、$L_{lk2}$分别表示次级绕组的等效电阻、分布电容和漏感，$L_{m}$为励磁电感，表征磁芯对主磁通的储能能力；$R_{m}$为铁损等效电阻，用于反映磁芯在交变磁场作用下产生的磁滞损耗与涡流损耗；$C_{m}$为初次级绕组间的耦合分布电容；$N_1$、$N_2$分别为初级和次级绕组匝数。在高频工作条件下，上述寄生参数（漏感、绕组电阻、分布电容等）会显著影响电路工作状态，因此常见的高频变压器结构、材料和设计方法均需围绕高频损耗抑制与寄生参数控制展开。根据系统总体设计指标及功能需求，高频变压器的设计指标如表\ref{transformer_spec}所示，本文采用面积乘积法（AP法）作为理论基础进行高频变压器的设计，具体设计流程如下：首先根据工作频率和磁导率等参数选取合适的磁芯材料，然后根据设计指标计算磁芯参数，其次选取绕组导线的线材和线径，最后完成变压器的匝数计算。
 \begin{table}[htbp]
-    \caption{\label{transformer_spec}高频变压器设计指标}
-    \centering
-    \small
-    \setlength{\tabcolsep}{20pt}
+	\caption{\label{transformer_spec}高频变压器设计指标}
+	\centering
+	\small
+	\setlength{\tabcolsep}{20pt}
 	\begin{tabular}{c c c c }
-        \hline
-        指标 & 数值 & 指标 & 数值 \\
-        \hline
-        初/次级匝数比  & 1:1:4  & 输入直流电压 & 2.5V $\sim$ 48V\\
-        工作频率  & 350KHz & 最大输出功率 & 100W \\
-        \hline
-    \end{tabular}
+		\hline
+		指标      & 数值     & 指标     & 数值              \\
+		\hline
+		初/次级匝数比 & 1:1:4  & 输入直流电压 & 2.5V $\sim$ 48V \\
+		工作频率    & 350KHz & 最大输出功率 & 100W            \\
+		\hline
+	\end{tabular}
 \end{table}
 
 \begin{enumerate}[topsep = 0 pt, itemsep= 0 pt, parsep=0pt, partopsep=0pt, leftmargin=0pt, itemindent=44pt, labelsep=6pt, listparindent=24pt, label=(\arabic*)]
 	\item 变压器磁芯材料选取
-	
-    磁芯材料的选取直接决定高频变压器的效率、温升水平以及整体体积。在高频条件下，绕组中的交变电流会在磁芯内部建立交变磁场，而磁通密度的周期性变化将导致磁芯中产生损耗（涡流损耗和磁滞损耗）。一般而言，磁芯损耗与工作频率及磁通密度幅值密切相关，在频率升高的条件下，单位体积磁芯损耗呈显著上升趋势。因此高频变压器通常选用具有低高频损耗、高电阻率以及良好温度稳定性的磁性材料。常见材料的参数对比如表\ref{magnetic_core}所示。
-\begin{table}[htbp]
-    \caption{\label{magnetic_core}高频变压器常用磁芯材料参数}
-    \centering
-    \small
-    \setlength{\tabcolsep}{7pt}
-	\begin{tabular}{c c c c c}
-        \hline
-        材料类型 & 相对磁导率$\mu_r$  & 典型工作频率范围 & 主要特点 \\
-        \hline
-        硅钢片 & 2000–8000   & 50–400 Hz & 成本低，机械强度高，涡流损耗大\\
-        铁氧体  & 2000–15000  & 10KHz-5MHz & 电阻率高，涡流损耗低，温度稳定性好\\
-        铁硅铝 & 10–100  & <100KHz & 机械脆性大，加工难度高\\
-        坡莫合金 & 10⁴-10⁵& 50 Hz-20 KHz & 成本较高，易氧化\\
-        非晶合金 & 10⁴-10⁵ & 50Hz-50kHz &  成本较高，机械脆性大，磁滞损耗低\\
-        纳米晶合金 & 10⁴-10⁶ & 1kHz-1MHz & 成本高，加工工艺复杂、高频损耗最低\\
-        \hline
-    \end{tabular}
-\end{table}
 
-    综合各项磁芯材料的工作频率范围和主要特性可知，铁氧体材料的工作频率范围较大，同时其电阻率较高，有利于抑制涡流形成，且具备良好的绝缘性能与成本优势，适用于中小功率高频功率电子变换器。因此本文选择铁氧体磁芯作为变压器的磁性材料。在铁氧体材料中，常用于功率变压器的主要包括锰锌（Mn-Zn）铁氧体和镍锌（Ni-Zn）铁氧体两种类型，其中锰锌铁氧体具有较高的初始磁导率和较大的饱和磁通密度，在几十千赫兹至数百千赫兹频段内具有较低的磁芯损耗，且可选磁芯型号更多，因此选用针对功率电子应用优化的PC40型锰锌铁氧体作为磁芯材料。
-	
+	      磁芯材料的选取直接决定高频变压器的效率、温升水平以及整体体积。在高频条件下，绕组中的交变电流会在磁芯内部建立交变磁场，而磁通密度的周期性变化将导致磁芯中产生损耗（涡流损耗和磁滞损耗）。一般而言，磁芯损耗与工作频率及磁通密度幅值密切相关，在频率升高的条件下，单位体积磁芯损耗呈显著上升趋势。因此高频变压器通常选用具有低高频损耗、高电阻率以及良好温度稳定性的磁性材料。常见材料的参数对比如表\ref{magnetic_core}所示。
+	      \begin{table}[htbp]
+		      \caption{\label{magnetic_core}高频变压器常用磁芯材料参数}
+		      \centering
+		      \small
+		      \setlength{\tabcolsep}{7pt}
+		      \begin{tabular}{c c c c c}
+			      \hline
+			      材料类型  & 相对磁导率$\mu_r$ & 典型工作频率范围     & 主要特点              \\
+			      \hline
+			      硅钢片   & 2000–8000    & 50–400 Hz    & 成本低，机械强度高，涡流损耗大   \\
+			      铁氧体   & 2000–15000   & 10KHz-5MHz   & 电阻率高，涡流损耗低，温度稳定性好 \\
+			      铁硅铝   & 10–100       & <100KHz      & 机械脆性大，加工难度高       \\
+			      坡莫合金  & 10⁴-10⁵      & 50 Hz-20 KHz & 成本较高，易氧化          \\
+			      非晶合金  & 10⁴-10⁵      & 50Hz-50kHz   & 成本较高，机械脆性大，磁滞损耗低  \\
+			      纳米晶合金 & 10⁴-10⁶      & 1kHz-1MHz    & 成本高，加工工艺复杂、高频损耗最低 \\
+			      \hline
+		      \end{tabular}
+	      \end{table}
+
+	      综合各项磁芯材料的工作频率范围和主要特性可知，铁氧体材料的工作频率范围较大，同时其电阻率较高，有利于抑制涡流形成，且具备良好的绝缘性能与成本优势，适用于中小功率高频功率电子变换器。因此本文选择铁氧体磁芯作为变压器的磁性材料。在铁氧体材料中，常用于功率变压器的主要包括锰锌（Mn-Zn）铁氧体和镍锌（Ni-Zn）铁氧体两种类型，其中锰锌铁氧体具有较高的初始磁导率和较大的饱和磁通密度，在几十千赫兹至数百千赫兹频段内具有较低的磁芯损耗，且可选磁芯型号更多，因此选用针对功率电子应用优化的PC40型锰锌铁氧体作为磁芯材料。
+
 	\item 变压器磁芯参数计算与骨架选取
-    
-    在高频变压器的工程设计中，磁芯规格的确定通常采用面积乘积法（AP法）进行快速估算。该方法以磁芯有效截面积与磁芯窗口面积的乘积AP值作为核心参数，在满足功率容量、温升及磁通密度约束的前提下实现磁芯选型与尺寸匹配。磁芯AP值的计算公式如式(\ref{eq_ap})所示：
-\begin{equation}
-AP = A_e \times A_w = \frac{P_T}{k_u k_t B_{M} J f} \label{eq_ap}
-\end{equation}
-    式中，$A_e$为磁芯有效截面积，$A_w$为磁芯可绕导线的窗口面积，$P_T$为变压器视在功率，$k_u$为窗口利用系数，通常取0.2-0.4；$k_t$为一次侧电压的波形系数；$B_{M}$为所选磁芯材料允许的交流磁通密度；$J$为绕组电流密度，$f$为工作频率。
 
-    本系统采用中心抽头式推挽逆变结构，变压器初级使用中心抽头和对称绕组，而次极则为单绕组输出，系统最大输出功率为100W，考虑50\%的设计裕量，按150W进行变压器容量设计。若取变压器效率$\eta = 0.7$，则其视在功率$P_T$可按式(\ref{eq_pt})近似估算：
-\begin{equation}
-P_T = 2\frac{P_{out}}{\eta}+ P_{out} \approx 2\frac{150W}{0.7} + 150W \approx 578.57W \label{eq_pt}
-\end{equation}
+	      在高频变压器的工程设计中，磁芯规格的确定通常采用面积乘积法（AP法）进行快速估算。该方法以磁芯有效截面积与磁芯窗口面积的乘积AP值作为核心参数，在满足功率容量、温升及磁通密度约束的前提下实现磁芯选型与尺寸匹配。磁芯AP值的计算公式如式(\ref{eq_ap})所示：
+	      \begin{equation}
+		      AP = A_e \times A_w = \frac{P_T}{k_u k_t B_{M} J f} \label{eq_ap}
+	      \end{equation}
+	      式中，$A_e$为磁芯有效截面积，$A_w$为磁芯可绕导线的窗口面积，$P_T$为变压器视在功率，$k_u$为窗口利用系数，通常取0.2-0.4；$k_t$为一次侧电压的波形系数；$B_{M}$为所选磁芯材料允许的交流磁通密度；$J$为绕组电流密度，$f$为工作频率。
 
-    在AP法参数中，波形系数$k_t$反映了电压波形对磁通变化幅度的影响。推挽结构中，初级绕组两端承受双极性方波电压，磁芯工作于双向交变磁化状态，磁通密度在半周期内变化范围为磁芯最大磁通密度$B_{max}$的两倍，即$-B_{max}$到$B_{max}$。根据法拉第电磁感应定律，对半周期进行积分可得：
-\begin{equation}
-\int_0^{T/2}v(t)dt=NA_e\int_{-B_{max}}^{B_{max}}dB \Rightarrow V_{in} = 4fNA_eB_{max} \label{eq_kt}
-\end{equation}
-    式中，$V_{in}$为变压器初级输入电压的幅值，$N$为初级绕组匝数。由式(\ref{eq_kt})可见，对于双极性方波激励条件，波形系数$k_t=4$，间接表征了电压有效值和平均值之比。
+	      本系统采用中心抽头式推挽逆变结构，变压器初级使用中心抽头和对称绕组，而次极则为单绕组输出，系统最大输出功率为100W，考虑50\%的设计裕量，按150W进行变压器容量设计。若取变压器效率$\eta = 0.7$，则其视在功率$P_T$可按式(\ref{eq_pt})近似估算：
+	      \begin{equation}
+		      P_T = 2\frac{P_{out}}{\eta}+ P_{out} \approx 2\frac{150W}{0.7} + 150W \approx 578.57W \label{eq_pt}
+	      \end{equation}
 
-    根据PC40磁芯材料的技术手册，其在23°C时的饱和磁通密度$B_s = 500mT$，在100°C时下降至380mT，剩余磁通密度$B_r = 125mT$。考虑高温工况下的最不利条件，最大可用磁通摆幅为$B_{max} = B_s-B_r = 380mT - 125mT = 255mT$。同时为了避免瞬态过冲导致磁饱和并降低磁芯损耗，按 60\% 裕量选取交流磁通密度$B_{M}$：
-\begin{equation}
-B_{M} = 2B_{max} \times 0.6 = 2\times 255mT \times 0.6 = 270mT = 0.27T \label{eq_bm}
-\end{equation}
+	      在AP法参数中，波形系数$k_t$反映了电压波形对磁通变化幅度的影响。推挽结构中，初级绕组两端承受双极性方波电压，磁芯工作于双向交变磁化状态，磁通密度在半周期内变化范围为磁芯最大磁通密度$B_{max}$的两倍，即$-B_{max}$到$B_{max}$。根据法拉第电磁感应定律，对半周期进行积分可得：
+	      \begin{equation}
+		      \int_0^{T/2}v(t)dt=NA_e\int_{-B_{max}}^{B_{max}}dB \Rightarrow V_{in} = 4fNA_eB_{max} \label{eq_kt}
+	      \end{equation}
+	      式中，$V_{in}$为变压器初级输入电压的幅值，$N$为初级绕组匝数。由式(\ref{eq_kt})可见，对于双极性方波激励条件，波形系数$k_t=4$，间接表征了电压有效值和平均值之比。
 
-    将式(\ref{eq_pt})、式(\ref{eq_kt})和式(\ref{eq_bm})代入式(\ref{eq_ap})中，取窗口利用系数$k_u = 0.2$、绕组电流密度$J = 400A/cm^2$、工作频率$f = 350kHz$，并附加20\%的设计裕量，可得所需面积乘积AP值为：
-\begin{equation}
-AP = \frac{P_T}{k_u k_t B_{M} J f}\times 1.2 = \frac{578.57W\times 1.2}{0.2 \times 4 \times 0.27T \times 400A/cm^2 \times 350kHz} \approx 0.1913 cm^4
-\end{equation}
-    
-    在磁芯选型过程中，本文选用PQ3230型磁芯骨架。根据PQ3230的技术参数，窗口面积$A_w =((27.5-13.45)/2)*(21.3/2)=74.8163mm^2$, 有效截面积$A_e = 153.8 mm^2$，面积乘积为$A_p = A_w A_e = 74.8163mm^2 \times 153.8mm^2 = 1.1507cm^4 > 0.1913 cm^4$。由此可见，PQ3230骨架的面积乘积AP值能够满足设计需求，且具有较大的裕量。较高的面积乘积意味着在相同功率条件下可采用更低的工作磁通密度，从而有效降低单位体积磁芯损耗，减小温升，提高系统效率与长期运行可靠性。
-    
-    \item 导线线材与线径选取
-    
-    在350KHz的高频工作条件下，绕组中的交流电流将会显著受到趋肤效应的影响。由于交变磁场在导体内部感生涡流，电流密度将由导体中心向表面集中，导致有效导电截面积减小，等效交流电阻增大。趋肤效应会显著增加高频变压器绕组的铜损，因此绕组导线类型与线径的选择需尽量减小趋肤效应附加损耗的影响。
+	      根据PC40磁芯材料的技术手册，其在23°C时的饱和磁通密度$B_s = 500mT$，在100°C时下降至380mT，剩余磁通密度$B_r = 125mT$。考虑高温工况下的最不利条件，最大可用磁通摆幅为$B_{max} = B_s-B_r = 380mT - 125mT = 255mT$。同时为了避免瞬态过冲导致磁饱和并降低磁芯损耗，按 60\% 裕量选取交流磁通密度$B_{M}$：
+	      \begin{equation}
+		      B_{M} = 2B_{max} \times 0.6 = 2\times 255mT \times 0.6 = 270mT = 0.27T \label{eq_bm}
+	      \end{equation}
 
-    由系统在额定负载500$\Omega$下最大输出功率100W可知，变压器次极输出电流均方根值应不小于$I_{s,rms} = \sqrt{\frac{P}{R}} = \sqrt{\frac{100W}{500\Omega}} = 0.447A$，根据1:4的匝数比关系，则初级绕组电流均方根应不小于$I_{p,rms} = 4 \times I_{s,rms} = 1.788A$。考虑变压器效率、谐振网络无功分量以及动态工况下的电流峰值，导线截面积$A_{cu}$需要至少满足下式计算结果：
-\begin{equation}
-A_{cu} = \frac{I_{p,rms}}{J} = \frac{1.788A}{400A/cm^2} \times 1.5 = 0.6709mm^2 \label{eq_wire}
-\end{equation}
+	      将式(\ref{eq_pt})、式(\ref{eq_kt})和式(\ref{eq_bm})代入式(\ref{eq_ap})中，取窗口利用系数$k_u = 0.2$、绕组电流密度$J = 400A/cm^2$、工作频率$f = 350kHz$，并附加20\%的设计裕量，可得所需面积乘积AP值为：
+	      \begin{equation}
+		      AP = \frac{P_T}{k_u k_t B_{M} J f}\times 1.2 = \frac{578.57W\times 1.2}{0.2 \times 4 \times 0.27T \times 400A/cm^2 \times 350kHz} \approx 0.1913 cm^4
+	      \end{equation}
 
-    趋肤效应的定量表征通常采用趋肤深度$\delta$，电流在导体内有效流动的深度称为趋肤深度，当导体半径大于趋肤深度时，趋肤效应的作用明显，且随着导体的半径增加，导体交/直流电阻的比值呈指数增加。本文选取常见的铜导线，铜的电阻率$\rho = 1.678 \times 10^{-8} \Omega \cdot m$，磁导率$\mu = 1.2566 \times 10^{-6} H/m$，趋肤深度可根据式(\ref{eq_skin})计算：
-\begin{equation}
-\delta = \sqrt{\frac{\rho}{\pi f \mu}} = \sqrt{\frac{1.678 \times 10^{-8} \Omega \cdot m}{\pi \times 350 \times 10^3 \times 1.2566 \times 10^{-6}H/m}} \approx 0.11mm \label{eq_skin}
-\end{equation}
-    为使单根导体半径不超过趋肤深度，应满足导体的线径不超过$2\delta = 0.22mm$。常见的变压器绕组线材有漆包圆铜线、利兹线、扁铜线以及铜箔绕组等，其中利兹线特别适用于高频变压器场合。利兹线是一种由多股细导线分别绝缘后按照特定规律绞合形成的导线结构，通过减小单股导线直径，并在绞合过程中周期性交换导线位置，可有效降低趋肤效应和邻近效应引起的交流损耗。本文选用单股直径为0.1mm的利兹线作为绕组线材，此时单股导线的截面积为$\pi \times (0.1mm/2)^2 = 0.00785mm^2$。由式(\ref{eq_wire})可知，为了使导线总截面积不小于0.6709mm²，所需最小股数为$\frac{0.6709mm^2}{0.00785mm^2} \approx 86$股导线，在此基础上考虑电流裕量和温升控制，选取规格为0.1mm$\times$90股的利兹线作为变压器绕组材料。
+	      在磁芯选型过程中，本文选用PQ3230型磁芯骨架。根据PQ3230的技术参数，窗口面积$A_w =((27.5-13.45)/2)*(21.3/2)=74.8163mm^2$, 有效截面积$A_e = 153.8 mm^2$，面积乘积为$A_p = A_w A_e = 74.8163mm^2 \times 153.8mm^2 = 1.1507cm^4 > 0.1913 cm^4$。由此可见，PQ3230骨架的面积乘积AP值能够满足设计需求，且具有较大的裕量。较高的面积乘积意味着在相同功率条件下可采用更低的工作磁通密度，从而有效降低单位体积磁芯损耗，减小温升，提高系统效率与长期运行可靠性。
 
-    \item 变压器匝数计算
-    
-    高频变压器初级绕组匝数通常由法拉第电磁感应定律确定，并结合一次侧电压波形与允许磁通密度约束进行计算。由式(\ref{eq_kt})可知，当推挽变压器初级中心抽头施加双极性方波电压时，初级绕组的匝数可根据下式计算：
-\begin{equation}
-N = \frac{V_{in}}{4fA_eB_{max}} = \frac{48V}{4 \times 350 \times 10^3Hz \times 153.8mm^2 \times 0.255T} \approx 0.87 \label{eq_turns}
-\end{equation}
-由此可见，在所选磁芯截面积较大的条件下，为满足不饱和约束，理论上初级匝数取大于等于1即可。但在实际工程中，匝数过低励磁电感偏小、励磁电流增大，从而加重开关器件电流应力并提高铜损与损耗水平；同时过小的匝数也可能使漏感比例上升、绕制困难。将初级每半边绕组匝数选为4匝，按照变压器设计指标的匝比关系1:1:4，则本文所设计的变压器初、次级匝数分别为4匝、4匝、16匝。	
+	\item 导线线材与线径选取
+
+	      在350KHz的高频工作条件下，绕组中的交流电流将会显著受到趋肤效应的影响。由于交变磁场在导体内部感生涡流，电流密度将由导体中心向表面集中，导致有效导电截面积减小，等效交流电阻增大。趋肤效应会显著增加高频变压器绕组的铜损，因此绕组导线类型与线径的选择需尽量减小趋肤效应附加损耗的影响。
+
+	      由系统在额定负载500$\Omega$下最大输出功率100W可知，变压器次极输出电流均方根值应不小于$I_{s,rms} = \sqrt{\frac{P}{R}} = \sqrt{\frac{100W}{500\Omega}} = 0.447A$，根据1:4的匝数比关系，则初级绕组电流均方根应不小于$I_{p,rms} = 4 \times I_{s,rms} = 1.788A$。考虑变压器效率、谐振网络无功分量以及动态工况下的电流峰值，导线截面积$A_{cu}$需要至少满足下式计算结果：
+	      \begin{equation}
+		      A_{cu} = \frac{I_{p,rms}}{J} = \frac{1.788A}{400A/cm^2} \times 1.5 = 0.6709mm^2 \label{eq_wire}
+	      \end{equation}
+
+	      趋肤效应的定量表征通常采用趋肤深度$\delta$，电流在导体内有效流动的深度称为趋肤深度，当导体半径大于趋肤深度时，趋肤效应的作用明显，且随着导体的半径增加，导体交/直流电阻的比值呈指数增加。本文选取常见的铜导线，铜的电阻率$\rho = 1.678 \times 10^{-8} \Omega \cdot m$，磁导率$\mu = 1.2566 \times 10^{-6} H/m$，趋肤深度可根据式(\ref{eq_skin})计算：
+	      \begin{equation}
+		      \delta = \sqrt{\frac{\rho}{\pi f \mu}} = \sqrt{\frac{1.678 \times 10^{-8} \Omega \cdot m}{\pi \times 350 \times 10^3 \times 1.2566 \times 10^{-6}H/m}} \approx 0.11mm \label{eq_skin}
+	      \end{equation}
+	      为使单根导体半径不超过趋肤深度，应满足导体的线径不超过$2\delta = 0.22mm$。常见的变压器绕组线材有漆包圆铜线、利兹线、扁铜线以及铜箔绕组等，其中利兹线特别适用于高频变压器场合。利兹线是一种由多股细导线分别绝缘后按照特定规律绞合形成的导线结构，通过减小单股导线直径，并在绞合过程中周期性交换导线位置，可有效降低趋肤效应和邻近效应引起的交流损耗。本文选用单股直径为0.1mm的利兹线作为绕组线材，此时单股导线的截面积为$\pi \times (0.1mm/2)^2 = 0.00785mm^2$。由式(\ref{eq_wire})可知，为了使导线总截面积不小于0.6709mm²，所需最小股数为$\frac{0.6709mm^2}{0.00785mm^2} \approx 86$股导线，在此基础上考虑电流裕量和温升控制，选取规格为0.1mm$\times$90股的利兹线作为变压器绕组材料。
+
+	\item 变压器匝数计算
+
+	      高频变压器初级绕组匝数通常由法拉第电磁感应定律确定，并结合一次侧电压波形与允许磁通密度约束进行计算。由式(\ref{eq_kt})可知，当推挽变压器初级中心抽头施加双极性方波电压时，初级绕组的匝数可根据下式计算：
+	      \begin{equation}
+		      N = \frac{V_{in}}{4fA_eB_{max}} = \frac{48V}{4 \times 350 \times 10^3Hz \times 153.8mm^2 \times 0.255T} \approx 0.87 \label{eq_turns}
+	      \end{equation}
+	      由此可见，在所选磁芯截面积较大的条件下，为满足不饱和约束，理论上初级匝数取大于等于1即可。但在实际工程中，匝数过低励磁电感偏小、励磁电流增大，从而加重开关器件电流应力并提高铜损与损耗水平；同时过小的匝数也可能使漏感比例上升、绕制困难。将初级每半边绕组匝数选为4匝，按照变压器设计指标的匝比关系1:1:4，则本文所设计的变压器初、次级匝数分别为4匝、4匝、16匝。
 \end{enumerate}
 
 综上所述，结合系统功率等级、工作频率及电磁参数约束，本文所设计的高频变压器选用PC40型锰锌铁氧体磁芯，PQ3230骨架，绕组线材选用0.1mm$\times$70股的利兹线，初级绕组设计为4匝中心抽头对称结构，次级绕组为16匝单绕组，构成初、次级1:1:4的匝数比关系。上述设计在保证磁芯不发生饱和的前提下实现了所需的电压增益，从而满足系统推挽结构高频变压器的设计需求，同时也保留了充分的设计裕量。
@@ -287,68 +287,68 @@ N = \frac{V_{in}}{4fA_eB_{max}} = \frac{48V}{4 \times 350 \times 10^3Hz \times 1
 
 对于幅值为$V_{in}$、频率为$f_s$的双极性方波信号$V_s$，其傅里叶级数展开式可表示为：
 \begin{equation}
-V_s\left(t\right)=\frac{4\mathrm{V}_{\mathrm{in}}}{\pi}\frac{1}{n}\cos\left(\alpha\right)\Sigma_{n=1,3,5,...\infty}^{\infty}\sin\left(2\pi nf_st\right) \label{eq_fourier}
+	V_s\left(t\right)=\frac{4\mathrm{V}_{\mathrm{in}}}{\pi}\frac{1}{n}\cos\left(\alpha\right)\Sigma_{n=1,3,5,...\infty}^{\infty}\sin\left(2\pi nf_st\right) \label{eq_fourier}
 \end{equation}
 式中，$n$为谐波次数，$\alpha$为相位导通角。由式(\ref{eq_fourier})可知，双极性方波信号由基频分量及一系列奇次谐波构成，其中基波幅值占主要成分。通过引入LC谐振网络，使电路在目标工作频率附近呈现较低阻抗，从而基波分量有效传输到负载两端，同时对高次谐波产生较大的阻抗，实现谐波抑制。
 
 从电路结构上看，LC谐振网络本质上属于无源滤波器的一种形式，由电感$L$和电容$C$两种无源元件构成。通过合理设计电感与电容参数，可使网络在特定频率处产生谐振特性，在谐振点处实现阻抗变换及电压幅值提升。传统的无源滤波器设计方法如巴特沃斯、切比雪夫和贝塞尔滤波器等，通常以获得平坦的通带响应或特定的相位特性为目标，其在通带中心频率处一般不提供电压增益，甚至存在一定程度的衰减。而本系统所设计的LC谐振网络在谐振频率附近通过能量在电感与电容之间的周期性交换实现电压放大，使负载端获得较高幅值的交流电压，而负载功率的增加并非来源于谐振网络本身，而是由前级直流电源提供，因此谐振网络也降低了逆变器输出端的等效负载阻抗。
 \begin{figure}[htbp]
-\centering
-\includegraphics[scale=0.3]{Fig/LC.pdf}
-\caption{\label{lc_filter}LC谐振网络结构}
+	\centering
+	\includegraphics[scale=0.3]{Fig/LC.pdf}
+	\caption{\label{lc_filter}LC谐振网络结构}
 \end{figure}
 
 一般而言，提高滤波器阶数可以增强对高次谐波的抑制能力，但同时也会增加电路损耗、器件数量以及设计难度。综合考虑系统效率和滤波性能等因素，本文最终选用π形串联馈电的六阶LC谐振网络，如图\ref{lc_filter}所示。该LC谐振网络的传递函数为：
 \begin{equation}
-\begin{gathered}
-G_{LC}(s)=\frac{U_{out}(s)}{U_{in}(s)}=\frac{1}{As^6 + Bs^4 + Cs^2 + 1} \\
-\text{式中}
-\left\{
-\begin{aligned}
-A &= L_1L_2L_3C_1C_2C_3 \\
-B &= L_1L_2C_1C_2 + L_1L_2C_1C_3 + L_1L_3C_1C_3
-   + L_1L_3C_2C_3 + L_2L_3C_2C_3 \\
-C &= L_1C_1 + L_1C_2 + L_1C_3 + L_2C_2 + L_2C_3 + L_3C_3 \label{eq_gc1}
-\end{aligned}
-\right.
-\end{gathered}
+	\begin{gathered}
+		G_{LC}(s)=\frac{U_{out}(s)}{U_{in}(s)}=\frac{1}{As^6 + Bs^4 + Cs^2 + 1} \\
+		\text{式中}
+		\left\{
+		\begin{aligned}
+			A & = L_1L_2L_3C_1C_2C_3                                                 \\
+			B & = L_1L_2C_1C_2 + L_1L_2C_1C_3 + L_1L_3C_1C_3
+			+ L_1L_3C_2C_3 + L_2L_3C_2C_3                                            \\
+			C & = L_1C_1 + L_1C_2 + L_1C_3 + L_2C_2 + L_2C_3 + L_3C_3 \label{eq_gc1}
+		\end{aligned}
+		\right.
+	\end{gathered}
 \end{equation}
 该LC谐振网络可视为由三个二阶LC网络串联形成的六阶系统，为了对目标工作频率为350KHz的基频分量产生较高的增益，且对基次谐波分量产生较大的衰减，设定三个谐振频率点分别位于$f_1 = 350KHz$、$f_2 = 4f_1$、$f_3 = 16f_1$处，则传递函数可以表示为：
 \begin{equation}
-\begin{aligned}
-G_{LC}(s) = \frac{U_o(s)}{U_i(s)} &= \frac{K}{(s+j\omega)(s-j\omega)(s+j4\omega)(s-j4\omega)(s+j16\omega)(s-j16\omega)} \\
-&= \frac{K}{s^{6}+272\omega^{2}s^{4}+4368\omega^{4}s^{2}+4096\omega^{6}} \label{eq_gc2}
-\end{aligned}
+	\begin{aligned}
+		G_{LC}(s) = \frac{U_o(s)}{U_i(s)} & = \frac{K}{(s+j\omega)(s-j\omega)(s+j4\omega)(s-j4\omega)(s+j16\omega)(s-j16\omega)}   \\
+		                                  & = \frac{K}{s^{6}+272\omega^{2}s^{4}+4368\omega^{4}s^{2}+4096\omega^{6}} \label{eq_gc2}
+	\end{aligned}
 \end{equation}
 式中，$\omega = 2\pi f_1$为基频的角频率，$K$为增益系数。对比式(\ref{eq_gc1})和(\ref{eq_gc2})可得：
 \begin{equation}
-\begin{cases}
-K = 4096\omega^{6} \\
-L_1L_2L_3C_1C_2C_3 = \frac{1}{4096\omega^{6}} \\
-L_1L_2C_1C_2 + L_1L_2C_1C_3 + L_1L_3C_1C_3 + L_1L_3C_2C_3 + L_2L_3C_2C_3    \label{eq_lcvalue}
-= \frac{17}{256\omega^{4}} \\
-L_1C_1 + L_1C_2 + L_1C_3 + L_2C_2 + L_2C_3 + L_3C_3
-= \frac{273}{256\omega^{2}}
-\end{cases}
+	\begin{cases}
+		K = 4096\omega^{6}                            \\
+		L_1L_2L_3C_1C_2C_3 = \frac{1}{4096\omega^{6}} \\
+		L_1L_2C_1C_2 + L_1L_2C_1C_3 + L_1L_3C_1C_3 + L_1L_3C_2C_3 + L_2L_3C_2C_3    \label{eq_lcvalue}
+		= \frac{17}{256\omega^{4}}                    \\
+		L_1C_1 + L_1C_2 + L_1C_3 + L_2C_2 + L_2C_3 + L_3C_3
+		= \frac{273}{256\omega^{2}}
+	\end{cases}
 \end{equation}
 
 在实际工程设计中，电感与电容器件的参数选择通常受到市场标准器件规格的限制，相比电容而言电感的可选范围和调节灵活度较低，因此在LC谐振网络的参数计算过程中，优先确定三个电感参数值为$L_1 = 150\mu H$、$L_2 = 220\mu H$、$L_3 = 150\mu H$，将其代入式(\ref{eq_gc1})可求解相应的电容参数。在器件选型过程中，应重点关注高频性能指标，如自谐振频率、品质因数以及等效串联电阻和电感，从而尽量减小高频损耗，本文选取银云母电容和高频铁氧体磁芯电感作为主要器件。
 
 由于电感和电容器件均存在一定的参数容差，且器件本身和电路中存在寄生参数，同时变压器次极绕组存在的寄生电感和分布参数也会对谐振网络的工作特性产生影响，从而导致理论计算值与实际电路响应之间存在一定偏差。因此在完成理论参数计算和器件初选之后，还需要通过电路仿真以及样机测试进行进一步的参数修正和优化。综合理论计算、器件可获得性以及实验调试结果，本文最终选取的LC谐振网络参数如表\ref{LC_value}所示，相关电路的仿真分析结果将在后续章节中展示：
 \begin{table}[htbp]
-    \caption{\label{LC_value}LC谐振网络设计参数}
-    \centering
-    \small
-    \setlength{\tabcolsep}{20pt}
+	\caption{\label{LC_value}LC谐振网络设计参数}
+	\centering
+	\small
+	\setlength{\tabcolsep}{20pt}
 	\begin{tabular}{c c c c }
-        \hline
-        电感 & 数值 & 电容 & 数值 \\
-        \hline
-        $L_1$ & 150$\mu$ H & $C_1$ & 1451pF \\
-        $L_2$ & 220$\mu$ H & $C_2$ & 180pF \\
-        $L_3$ & 150$\mu$ H & $C_3$ & 51pF \\
-        \hline
-    \end{tabular}
+		\hline
+		电感    & 数值         & 电容    & 数值     \\
+		\hline
+		$L_1$ & 150$\mu$ H & $C_1$ & 1451pF \\
+		$L_2$ & 220$\mu$ H & $C_2$ & 180pF  \\
+		$L_3$ & 150$\mu$ H & $C_3$ & 51pF   \\
+		\hline
+	\end{tabular}
 \end{table}
 
 \section{控制模块设计}
@@ -356,13 +356,13 @@ L_1C_1 + L_1C_2 + L_1C_3 + L_2C_2 + L_2C_3 + L_3C_3
 \subsection{主控芯片选型}
 控制模块中的主控处理器需承担系统核心控制与数据处理任务：向可调直流源和推挽逆变器提供偏置电压和驱动信号；对输出电压电流采样信号进行高速采集；处理用户通过人机交互接口输入的控制指令；向上位机发送系统控制参数及状态数据；实时检测负极板、脚踏和手柄的工作状态；完成系统运行调试与状态指示；控制、数字信号处理等多种算法的运行和系统控制流的执行。
 
-综合上述功能需求可知，主控芯片需具备较强的运算性能、高频信号采样能力以及丰富的外设资源，以满足系统实时控制和多模块数据交互需求。本文最终选用STMicroelectronics公司的STM32F303VCT6微控制器作为控制模块的核心处理器。该芯片基于ARM Cortex-M4内核，最高主频可达72MHz，内部集成了最高工作频率为72MHz的多通道高速ADC，在10bit分辨率下可实现最高6 MSPS的采样率。根据奈奎斯特采样定律可知能够满足350KHz高频信号的采样频率需求。在片上外设方面，该芯片提供了丰富的GPIO接口、高级定时器、DMA控制器以及多种通信接口（如USART、SPI、I2C等），便于实现系统的控制逻辑和外设通信。此外，该芯片在兼顾成本和性能的同时具有一定的信号处理能力，其内核支持硬件浮点运算单元（FPU）与DSP指令集，可以提高数字信号处理算法的运算速度。在软件开发方面，STM32系列微控制器软件生态体系完善，支持多种开发环境和调试工具，能够加速系统软件的开发和调试过程。综合考虑处理性能、外设资源、信号处理能力以及系统成本等因素，该控制器能够满足本文设计的高频电外科发生器系统的控制需求。
+综合上述功能需求可知，主控芯片需具备较强的运算性能、高频信号采样能力以及丰富的外设资源，以满足系统实时控制和多模块数据交互需求。本文最终选用STMicroelectronics公司的STM32F303VCT6微控制器作为控制模块的核心处理器。该芯片基于ARM Cortex-M4内核，最高主频可达72MHz，内部集成了最高工作频率为72MHz的多通道高速ADC，在10bit分辨率下可实现最高6 MSPS的采样率，根据奈奎斯特采样定律可知能够满足350KHz高频信号的采样频率需求。在片上外设方面，该芯片提供了丰富的GPIO接口、高级定时器、DMA控制器以及多种通信接口（如USART、SPI、I2C等），便于实现系统的控制逻辑和外设通信。此外，该芯片在兼顾成本和性能的同时具有一定的信号处理能力，其内核支持硬件浮点运算单元（FPU）与DSP指令集，可以提高数字信号处理算法的运算速度。在软件开发方面，STM32系列微控制器软件生态体系完善，支持多种开发环境和调试工具，能够加速系统软件的开发和调试过程。综合考虑处理性能、外设资源、信号处理能力以及系统成本等因素，该控制器能够满足本文设计的高频电外科发生器系统的控制需求。
 \subsection{控制单元架构设计}
 由于控制单元中的主控处理器需要执行多种控制与数据处理任务，其功能复杂且实时性要求较高，需合理设计控制单元的整体架构以提高任务执行效率并实现清晰的任务管理。从电路结构的角度来看，系统的输出侧与控制侧处于两个相互隔离的电气区域，驱动控制任务与信号采样处理任务难以集成在同一微控制器上运行，因此本文在控制单元中采用双MCU架构，将两个微控制器分别置于隔离区和非隔离区，并通过隔离通信模块进行二者之间的数据与指令的交换。控制单元的整体架构如图\ref{control_arch}所示。
 \begin{figure}[htbp]
-\centering
-\includegraphics[scale=0.25]{Fig/control_arch.pdf}
-\caption{\label{control_arch}控制单元整体架构图}
+	\centering
+	\includegraphics[scale=0.25]{Fig/control_arch.pdf}
+	\caption{\label{control_arch}控制单元整体架构图}
 \end{figure}
 
 在双MCU之间的数据通信方面，本文选用ADuM4151作为隔离通信器件。该器件采用磁耦隔离技术实现SPI接口的高速数字信号隔离，内部提供四个高速SPI通道以及三个速率为250Kbps的低速辅助通道，在本文的设计中主要使用其中三个低速辅助通道与一个高速SPI通道实现双MCU之间的隔离通信。其中，两条低速通道用于建立串口（Uart）通信链路，交换控制指令（如ADC通道切换）和数据（如隔离区获取的电压电流幅值和相位信息）。在高速SPI通道中维护一个状态标志信号，用于表示高频输出是否处于间断工作状态（在不同波峰因子模式下引入的间断时间），该信号由非隔离区MCU进行控制，并作为隔离区MCU启动或停止采样任务的重要触发依据。
@@ -375,47 +375,47 @@ L_1C_1 + L_1C_2 + L_1C_3 + L_2C_2 + L_2C_3 + L_3C_3
 在信号处理系统中，常见的交流信号检测方法按测量原理可分为整流测量法和数字信号处理法两大类。其中整流测量法通过模拟电路将交流信号转换为直流量，再通过模数转换器（ADC）对该直流量进行测量，如峰值检测、整流平均值检测以及有效值检测等。这类方法具有响应速度快、测量精度高等优点，然而其在获取多种信号特征时需要复杂的测量电路。数字信号处理法则通过高速ADC直接对交流信号采样，而后在微处理器中对采样的离散数据进行滤波、频谱分析或特征提取。该方法的主要优势在于算法实现灵活，可在同一硬件平台实现多种测量功能，但其需要较高性能的ADC和微处理器。综合系统数据需求、设计复杂度以及成本等因素，本文最终采用基于数字信号处理法的交流输出信号检测方法。该方法在硬件设计层面依赖于高频输出信号的可靠采样与高速ADC的精确采集，而频域分析部分将完全由软件算法实现。本节主要围绕硬件部分展开，相关算法的实现原理将在第四章软件设计部分进行详细介绍。
 
 \begin{figure}[htbp]
-\centering
-\includegraphics[scale=0.23]{Fig/stm32adc.pdf}
-\caption{\label{stm32adc}微处理器芯片内部ADC连接框图}
+	\centering
+	\includegraphics[scale=0.23]{Fig/stm32adc.pdf}
+	\caption{\label{stm32adc}微处理器芯片内部ADC连接框图}
 \end{figure}
 如前文所述，本文所选微控制器内部集成的模数转换器在采样率和分辨率方面能够满足350KHz高频信号采样的需求，但在实际应用中，输出信号的采样电路还需要与模数转换器的输入特性进行匹配，以保证采样精度与转换稳定性。图\ref{stm32adc}所示为所选STM32微控制器芯片内部ADC的输入结构，在ADC进入采样阶段时，待采样的模拟信号源$V_{AIN}$通过外部输入阻抗$R_{AIN}$和内部输入电阻$R_{ADC}$向采样保持电容$C_{ADC}$充电；在采样阶段结束并进入转换阶段时，ADC将对保持电容两端电压进行模数转换。由此可知，充电过程的时间常数为$\tau = (R_{AIN}+R_{ADC})C_{ADC}$，当外部输入阻抗较大时，采样保持电容无法在设定的采样阶段时间内充分充电到待测电压，使得保持电压与真实输入电压之间产生误差。根据微控制器的数据手册，当ADC工作在10bit分辨率、采样时间设置为19.5个ADC采样时钟周期时，允许的最大外部输入阻抗约为2.2K$\Omega$，则电压和电流信号采样电路的输入阻抗亦需控制在该范围之内，从而避免采样误差。
 \begin{figure}[htbp]
-\centering
-\begin{minipage}[c]{0.5\textwidth}
-\centering
-\includegraphics[scale=0.24]{Fig/voltagemeas.pdf} %1:1导入
-\end{minipage}%
-\begin{minipage}[c]{0.5\textwidth}
-\centering
-\includegraphics[scale=0.24]{Fig/currentmeas.pdf}
-\end{minipage}\\[1pt]
-\begin{minipage}[t]{0.5\textwidth} % 以下为新添加页面划分，[t]表示行顶部对齐
-\caption{\label{voltagemeas}电压信号采样电路}
-\end{minipage}%
-\begin{minipage}[t]{0.5\textwidth}
-\caption{\label{currentemeas}电流信号采样电路}
-\end{minipage}%
+	\centering
+	\begin{minipage}[c]{0.5\textwidth}
+		\centering
+		\includegraphics[scale=0.24]{Fig/voltagemeas.pdf} %1:1导入
+	\end{minipage}%
+	\begin{minipage}[c]{0.5\textwidth}
+		\centering
+		\includegraphics[scale=0.24]{Fig/currentmeas.pdf}
+	\end{minipage}\\[1pt]
+	\begin{minipage}[t]{0.5\textwidth} % 以下为新添加页面划分，[t]表示行顶部对齐
+		\caption{\label{voltagemeas}电压信号采样电路}
+	\end{minipage}%
+	\begin{minipage}[t]{0.5\textwidth}
+		\caption{\label{currentemeas}电流信号采样电路}
+	\end{minipage}%
 \end{figure}
 
 由3.3.3节的分析可知，系统在额定负载条件下输出的最大电压约为316.2V，而所选微控制器ADC的最大允许输入电压为3.3V，因此电压信号采样电路必须通过分压对输出电压进行幅值缩放，且至少提供约$\frac{316.2V}{3.3V} \approx 97$倍的衰减比例。本文设计的电压信号检测电路如图\ref{voltagemeas}所示，高频输出电压经过分压网络后得到的采样电压满足如下关系：
 \begin{equation}
-\frac{HF_{out}}{HF_{meas}} = \frac{R_5//R_6}{R_1//R_2 + R_3//R_4+ R_5//R_6} \approx \frac{1}{125} < \frac{1}{96} \label{eq_voltage_division}
+	\frac{HF_{out}}{HF_{meas}} = \frac{R_5//R_6}{R_1//R_2 + R_3//R_4+ R_5//R_6} \approx \frac{1}{125} < \frac{1}{96} \label{eq_voltage_division}
 \end{equation}
 由式(\ref{eq_voltage_division})可知，该电压采样电路能够将最大输出电压有效压缩至ADC的可测范围内，同时该电路的输入阻抗为$(R_1//R_2 + R_3//R_4)//(R_5//R_6) \approx 545.6\Omega < 2.2k\Omega$，明显小于ADC数据手册中规定的最大外部输入阻抗要求。
 
 根据系统最大输出电压316.2V以及额定负载500$\Omega$，可计算得到系统在额定条件下的最大输出电流约为$\frac{316.2V}{500\Omega} \approx 0.63A$。在电流信号检测电路中，若直接使用低阻值采样电阻进行电流采样，则采样电阻的等效串联电感将在高频信号作用下产生较大的感抗，对电流测量信号的幅值和相位产生很大的影响。因此本文采用通过电容电压间接测量电流的方法，电流信号检测电路如图\ref{currentemeas}所示。在LC谐振网络输出端与输出模块之间的电流回路中串接了两个4700pF隔直电容，该电容一方面用于隔离可能存在的直流成分通过输出模块进入人体，从而提高系统的安全性；另一方面通过在其中一个电容两端并联电阻分压网络，对该电容两端的高频电压进行采样。由于该电容处于高频电流的必经路径，当系统工作时高频电流流经电容将在其两端产生同样频率的电压信号，即为电流信号的间接表征。若电容两端电压可表示为$U_{C} = Asin(wt)$，则通过电容的电流为：
 \begin{equation}
-I_C = C\frac{dU_C}{dt} = C\frac{d[Asin(wt)]}{dt} = CAwcos(wt)
+	I_C = C\frac{dU_C}{dt} = C\frac{d[Asin(wt)]}{dt} = CAwcos(wt)
 \end{equation}
 由此可见，通过采集隔直电容两端的电压信号并进行的幅值和相位分析，即可计算得到高频输出电流大小。同时在该采样电路中输入阻抗为$R_7//R_8 \approx 1.9K\Omega < 2.2k\Omega$，同样满足ADC的外部输入阻抗要求。在实际电路设计中，应选用高频特性好、自谐振频率远高于系统工作频率的电容器件，以尽可能减小寄生参数对测量结果的影响。
 
 \section{人机交互模块设计}
 人机交互模块是操作者与高频电外科发生器进行交互的主要接口，通过该模块可以完成系统输出功率设置、工作模式选择以及运行状态查看等操作，因此在设计过程中需要兼顾功能性、操作便捷性以及系统安全性等方面因素。本文设计的人机交互模块独立于系统主板实现，由一块具备独立主控单元的人机交互接口（HMI）板构成，该HMI板通过SPI接口与系统主板进行数据与控制指令的交换。HMI板的核心显示单元为一块4.3英寸TFT LCD电容触摸屏，其中显示模块和触摸模块分别通过8080并行接口和IIC接口与主控芯片连接，以实现图形界面的显示和触摸输入功能。除此之外，HMI板还集成了多个功能模块以支持系统的各种功能需求，其中提示模块由蜂鸣器电路和状态指示LED电路组成，用于指示系统的运行状态及异常信息；用户操作模块由多个功能按键和一个旋钮（旋转编码器）组成，用于实现参数设置和菜单操作；数据存储模块由扩展的16MB Flash存储芯片以及SD卡接口电路组成，用于存储系统运行数据、界面资源及用户操作记录；通信模块由USB转串口电路和SPI通信接口电路组成，用于系统调试以及与主板之间的数据交互；电源管理模块则为板上各功能单元提供稳定的供电，同时实现显示屏背光控制以及RTC时钟备用电源管理。人机交互模块的结构如图\ref{HMI}所示。
 \begin{figure}[htbp]
-\centering
-\includegraphics[scale=0.35]{Fig/HMI.pdf}
-\caption{\label{HMI}人机交互模块结构图}
+	\centering
+	\includegraphics[scale=0.35]{Fig/HMI.pdf}
+	\caption{\label{HMI}人机交互模块结构图}
 \end{figure}
 
 综合上述功能需求可知，HMI板主控芯片需要具备大量引脚和接口以支持多种外围模块的连接和数据交换。本文最终选用STMicroelectronics公司的STM32F407VET6微控制器作为人机交互模块的核心处理器，该芯片同样基于ARM Cortex-M4内核，最高主频可达168MHz，其内部集成了多种通信接口（如SPI、IIC、SDIO等）以及丰富的外设资源，其中的FSMC存储控制接口可用于模拟LCD显示屏所需的8080并行接口时序，将图像数据并行高速传输至显示控制器，同时芯片内部512KB的Flash容量也能够支持较为复杂的UI界面设计及相关资源文件的存储需求。
@@ -468,9 +468,9 @@ IRF640N的SPICE模型的核心代码如代码列表(\ref{code:irf640})所示。�
 在完成上述两个缺失器件的模型的导入后，本文在LTSpice中搭建完整的高频能量发生模块仿真电路如图\ref{HF_System_Final}所示。在仿真电路搭建过程中，高频变压器采用耦合电感的方式建模，即利用多个电感元件与耦合系数（K语句）描述初级与次级绕组之间的磁耦合关系，同时为了模拟高频变压器在实际电路中的电气隔离作用，变压器初级侧地与次极侧地通过一个大阻值电阻进行连接，以避免仿真节点完全悬浮导致求解不稳定。
 
 \begin{figure}[htbp]
-\centering
-\includegraphics[scale=0.55]{Fig/HF_System_Final.pdf}
-\caption{\label{HF_System_Final}高频能量发生模块仿真实验电路图}
+	\centering
+	\includegraphics[scale=0.55]{Fig/HF_System_Final.pdf}
+	\caption{\label{HF_System_Final}高频能量发生模块仿真实验电路图}
 \end{figure}
 
 在电路实现上，可调直流稳压源V5的输入电压设置为48V，栅极驱动芯片U1与U2由12V电源供电，其输入信号由脉冲激励源产生，设置频率为350KHz、占空比为46.5\%的互补脉冲波形，并在两路驱动信号之间引入100ns的死区时间；为模拟高频变压器寄生参数在实际工作中对电路的影响，在变压器初级绕组两端分别串接0.2μ的小电感L9、L10用于模拟绕组的漏感。设置电路仿真为时域瞬态响应仿真，仿真时长10ms，可获得电路在稳定运行状态下的电压、电流等波形进行工作状态。
@@ -478,37 +478,37 @@ IRF640N的SPICE模型的核心代码如代码列表(\ref{code:irf640})所示。�
 \subsection{仿真结果分析}
 LC谐振网络的频率响应如图\ref{LC}所示。在目标工作频率350KHz处的电压增益约为5.52dB（折合1.89倍放大倍数），能够满足对输出电压幅值提升的设计需求，在基频的奇数次谐波频点处网络增益出现明显衰减，可有效抑制高次谐波成分。同时在目标频率附近呈现较低的输入阻抗特性，有利于基频能量向负载侧的有效传输。
 \begin{figure}[!h]
-\centering
-\subfloat[电压增益]{\includegraphics[scale=1]{MATLAB_plot_files/LC_V.pdf}%
-\label{LC:a}}
-\subfloat[输入阻抗特性]{\includegraphics[scale=1]{MATLAB_plot_files/LC_R.pdf}
-\label{LC:b}}
-\caption{LC谐振网络频率响应}\label{LC}
+	\centering
+	\subfloat[电压增益]{\includegraphics[scale=1]{MATLAB_plot_files/LC_V.pdf}%
+		\label{LC:a}}
+	\subfloat[输入阻抗特性]{\includegraphics[scale=1]{MATLAB_plot_files/LC_R.pdf}
+		\label{LC:b}}
+	\caption{LC谐振网络频率响应}\label{LC}
 \end{figure}
 
 为验证逆变电路中引入的隔离储能网络与尖峰电压吸收电路的影响，本文在仿真中进行了对比实验如图\ref{contrast}所示。由图\ref{no_improve}可知，当电路仅采用推挽逆变器的基本结构时，MOSFET在关断时漏极电压出现了严重的谐振，该现象主要由变压器漏感与开关管的输出电容形成的寄生谐振回路所引起，在开关过渡过程中会产生较大的振荡电压。同时在可调直流源输出侧，输出电流随着开关管的交替导通出现了明显的高频脉动波形，与前文的分析一致。当引入隔离储能网络与尖峰电压吸收电路后，仿真结果如图\ref{improve}所示，在开关管关断过程中漏极电压的谐振得到了有效抑制，同时高频脉动电流被隔离电感限制在逆变器局部回路中，使得前级可调直流源输出电流基本呈稳定直流特性，符合降压稳压电路的理想输出特性。
 \begin{figure}[!h]
-\centering
-\subfloat[未引入两种电路前能量发生电路的仿真波形]{\includegraphics[scale=1]{MATLAB_plot_files/no_improve.pdf}%
-\label{no_improve}} \\
-\subfloat[引入两种电路后能量发生电路的仿真波形]{\includegraphics[scale=1]{MATLAB_plot_files/improve.pdf}
-\label{improve}} \\
-\caption{隔离储能网络与尖峰电压吸收电路对比实验波形}\label{contrast}
+	\centering
+	\subfloat[未引入两种电路前能量发生电路的仿真波形]{\includegraphics[scale=1]{MATLAB_plot_files/no_improve.pdf}%
+		\label{no_improve}} \\
+	\subfloat[引入两种电路后能量发生电路的仿真波形]{\includegraphics[scale=1]{MATLAB_plot_files/improve.pdf}
+		\label{improve}} \\
+	\caption{隔离储能网络与尖峰电压吸收电路对比实验波形}\label{contrast}
 \end{figure}
 
 MOSFET驱动信号及电流波形如图\ref{mos_driver}所示。栅极驱动器输入电压为峰值3.3V、频率350KHz的PWM波形，该信号经栅极驱动芯片放大后形成峰值约为12V的驱动电压，与输入信号之间存在栅极驱动器引入的传播延时，同时也可以注意到栅源电压存在一定的米勒平台。漏极电流对应于逆变器输入电流的半周期波形，与图\ref{no_improve}中可调直流源输出电流均呈现出明显的高频脉动特性，从而进一步验证了推挽逆变拓扑的工作机理。
 
 \begin{figure}[htbp]
-\centering
-\includegraphics[scale=1]{MATLAB_plot_files/mos_driver.pdf}
-\caption{\label{mos_driver}MOSFET驱动及电流波形}
+	\centering
+	\includegraphics[scale=1]{MATLAB_plot_files/mos_driver.pdf}
+	\caption{\label{mos_driver}MOSFET驱动及电流波形}
 \end{figure}
 
 仿真电路进入稳态后输出电压波形如图\ref{output_vol}所示。可调直流源向推挽逆变电路提供的直流输入电压约为40V，逆变级变压器次极侧输出频率为350KHz、峰值约为155V的类矩形电压波形。与理论设计值相比该级电压增益略有下降，主要原因在于电路中引入了电感$L_{iso}$用于对逆变电路固有的脉冲能量进行隔离，由于电感直流电阻DCR在电流较大时产生压降，从而施加在高频变压器中心抽头的有效电压降低。负载侧的输出电压波形呈现出理想的正弦交流特性，其频率仍为350KHz，峰值约为287V，相比变压器次极侧输出幅值提升约1.85倍，且由于LC谐振网络的相位特性导致波形相位产生一定的偏移。上述仿真结果验证了系统高频能量发生电路的设计正确性与参数可行性。
 \begin{figure}[htbp]
-\centering
-\includegraphics[scale=1]{MATLAB_plot_files/output_vol.pdf}
-\caption{\label{output_vol}高频能量发生电路仿真输出电压波形}
+	\centering
+	\includegraphics[scale=1]{MATLAB_plot_files/output_vol.pdf}
+	\caption{\label{output_vol}高频能量发生电路仿真输出电压波形}
 \end{figure}
 \section{本章小结}
 仿真电路进入稳态后输出电压波形如图\ref{output_vol}所示。可调直流源向推挽逆变电路提供的直流输入电压约为40V，逆变级变压器次极侧输出频率为350KHz、峰值约为155V的类矩形电压波形。与理论设计值相比该级电压增益略有下降，主要原因在于电路中引入了电感$L_{iso}$用于对逆变电路固有的脉冲能量进行隔离，由于电感直流电阻DCR在电流较大时产生压降，从而施加在高频变压器中心抽头的有效电压降低。负载侧的输出电压波形呈现出理想的正弦交流特性，其频率仍为350KHz，峰值约为287V，相比变压器次极侧输出幅值提升约1.85倍，且由于LC谐振网络的相位特性导致波形相位产生一定的偏移。上述仿真结果验证了系统高频能量发生电路的设计正确性与参数可行性。
